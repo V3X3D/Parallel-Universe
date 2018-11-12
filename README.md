@@ -1,9 +1,9 @@
-##Play Parallel Universe
+## Play Parallel Universe
 
-https://v3x3d.itch.io/parallel-universe
+https://v3x3d.itch.io/parallel-universe  
 https://gamejolt.com/games/Parallel-Universe/376425
 
-##How to run
+## How to run
 
 Clone the repo
 *git clone https://github.com/gitVEXED/Parallel-Universe
