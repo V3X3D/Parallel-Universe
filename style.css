@@ -1,15 +1,14 @@
 body {
-	margin: 0px;
-	background: #232323;
+  margin: 0px;
+  background: #232323;
 }
-#canvasDiv {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
 }
-#canvas {
-	display: inline-block;
-  margin: auto;
-  box-shadow: 0px 0px 20px #000000;
-}
+/* #update-canvases { */
+/*   visibility: hidden; */
+/* } */

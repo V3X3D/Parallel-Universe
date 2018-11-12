@@ -2,207 +2,167 @@ gA.collision = (function() {
   "use strict";
 
   //Line Segment Collision Test Vars
-  var triRight,
-    triLeft,
-    triBottom,
-    pTop,
-    pLeft,
-    pRight,
-    pBottom;
+  var triRight, triLeft, triBottom, pTop, pLeft, pRight, pBottom;
+  var triTopL, triTopR, triBottomM, triBottomL, triBottomR, triTopM;
 
-  //Make segments then check intersections between them
-  //Only works if one segment in the check is vertical or horizontal
-  function Segment(x, y, vecx, vecy) {
-    this.x = x;
-    this.y = y;
-    this.vecx = vecx;
-    this.vecy = vecy;
+  function rectRect(x1, y1, x2, y2, tSw, tSh, tS2w, tS2h) {
+    var tSize2w = tS2w || tSw,
+      tSize2h = tS2h || tSh;
 
-    this.cross = function(seg) { //Checks if 'this' segment and another intersect
-
-      var denom = ((this.vecx - this.x) * (seg.vecy - seg.y)) - ((this.vecy - this.y) * (seg.vecx - seg.x));
-      var numr1 = ((this.y - seg.y) * (seg.vecx - seg.x)) - ((this.x - seg.x) * (seg.vecy - seg.y));
-      var numr2 = ((this.y - seg.y) * (this.vecx - this.x)) - ((this.x - seg.x) * (this.vecy - this.y));
-
-      if (denom === 0) return numr1 === 0 && numr2 === 0;
-
-      var r = numr1 / denom;
-      var s = numr2 / denom;
-
-      return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
-    };
+    if(x1+tSw > x2 && x1 < x2+tSize2w && y1+tSh > y2 && y1 < y2+tSize2h) {
+      return true;
+    }
+    return false;
   }
 
   //Checks around player (better way of doing collision detection)
-  function smartMove(px, py, pw, ph, ps, pd) {
-    gA.player.state.color = '#0f0';
+  function smartMove(obj, map, cTX, cTY, xDif, yDif) {
 
-    for(var y=0; y < gA.map.check.length; y+=1) {
-      for(var x=0; x < gA.map.check[y].length; x+=1) {
-        var tX = (x * gA.tS) + (gA.cTX-1)*gA.tS;
-        var tY = (y * gA.tS) + (gA.cTY-1)*gA.tS;
+    for(var y=0; y < map.length; y+=1) {
+      for(var x=0; x < map[y].length; x+=1) {
 
-        if (gA.map.check[y][x] === 1 || gA.map.check[y][x] === 2) { //Ground Tile Values
-          if (px < tX+gA.tS && px + pw > tX && py < tY+gA.tS && py + ph > tY) {
+        var tX = (x * gA.tS) + (cTX-1)*gA.tS;
+        var tY = (y * gA.tS) + (cTY-1)*gA.tS;
 
-            if (pd === 'right' && px+pw > tX) {
-              gA.player.state.x = tX - pw - ps;
-              gA.player.state.speedX = 0;
-            } else if (pd === 'left' && px < tX+gA.tS) {
-              gA.player.state.x = tX + gA.tS + ps;
-              gA.player.state.speedX = 0;
-            } else if (pd === 'jump' && py+ph > tY) {
-              gA.player.state.vy = 0;
-              // gA.player.state.gravity = 6.5;
-              gA.player.state.jump = false;
-            } else if (pd === 'gravity' && py < tY+gA.tS) {
-              gA.player.state.y = tY - ph - ps;
-              gA.player.state.jump = false;
-              return true;
+        var xPos = obj.x+xDif;
+        var yPos = obj.y+yDif;
+
+        //Block checks
+        if (rectRect(xPos, yPos, tX, tY, obj.w, obj.h, gA.tS, gA.tS)) {
+          if (map[y][x] === 1 || map[y][x] === 2) {
+
+            if (obj.action === 'gravity' && yPos+obj.h > tY) {
+              return { tY: tY };
+            }
+
+            return true;
+          }
+
+          //Spike full checks
+          if (map[y][x] === 3 || map[y][x] === 4) { //Spike facing up
+
+            triBottomL = [tX, tY+gA.tS];
+            triBottomR = [tX+gA.tS, tY+gA.tS];
+            triTopM = [tX+gA.tS/2, tY];
+
+            triLeft = new gA.segment.make2(triBottomL[0], triBottomL[1], gA.tS/2, -gA.tS);
+            triRight = new gA.segment.make2(triBottomR[0], triBottomR[1], -gA.tS/2, -gA.tS);
+
+            pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
+            pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
+            pBottom = new gA.segment.make2(obj.x, obj.y+obj.h, obj.w, 0);
+
+            if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pBottom)) {
+              return 'spike';
+            }
+          } else if (map[y][x] === 5 || map[y][x] === 6) { //Spike facing down
+
+            triTopL = [tX, tY];
+            triTopR = [tX+gA.tS, tY];
+            triBottomM = [tX+gA.tS/2, tY+gA.tS];
+
+            triLeft = new gA.segment.make2(triTopL[0], triTopL[1], gA.tS/2, gA.tS);
+            triRight = new gA.segment.make2(triTopR[0], triTopR[1], -gA.tS/2, gA.tS);
+
+            pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
+            pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
+            pTop = new gA.segment.make2(obj.x, obj.y, obj.w, 0);
+
+            if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pTop)) {
+              return 'spike';
             }
           }
-        }
 
-        if (gA.map.check[y][x] === 3 || gA.map.check[y][x] === 4) { //Spike Tile Values
-          if (px < tX+gA.tS && px + pw > tX && py < tY+gA.tS && py + ph > tY) {
+          //Spike half checks
+          if (map[y][x] === 7 || map[y][x] === 8) { //Half spike facing up
 
-            triRight = new Segment(tX+gA.tS/2, tY, tX+gA.tS, tY+gA.tS);
-            triLeft = new Segment(tX+gA.tS/2, tY, tX, tY+gA.tS);
+            triBottomL = [( tX )+gA.tS/4, tY+gA.tS];
+            triBottomR = [( tX+gA.tS )-gA.tS/4, tY+gA.tS];
+            triTopM = [tX+gA.tS/2, tY+gA.tS/2];
 
-            pLeft = new Segment(px, py, px, py+ph);
-            pRight = new Segment(px+pw, py, px+pw, py+ph);
-            pBottom = new Segment(px, py+ph, px+pw, py+ph);
+            triLeft = new gA.segment.make2(triBottomL[0], triBottomL[1], gA.tS/4, -gA.tS/2);
+            triRight = new gA.segment.make2(triBottomR[0], triBottomR[1], -gA.tS/4, -gA.tS/2);
 
-            if(triRight.cross(pLeft) || triLeft.cross(pRight)|| triLeft.cross(pBottom)) {
-              gA.player.state.color = '#f00'; //Remove this once engine is used in another game
+            pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
+            pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
+            pBottom = new gA.segment.make2(obj.x, obj.y+obj.h, obj.w, 0);
+
+            if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pBottom)) {
+              return 'spike';
+            }
+          } else if (map[y][x] === 9 || map[y][x] === 10) { //Half spike facing down
+
+            triTopL = [( tX )+gA.tS/4, tY];
+            triTopR = [( tX+gA.tS )-gA.tS/4, tY];
+            triBottomM = [tX+gA.tS/2, tY+gA.tS/2];
+
+            triLeft = new gA.segment.make2(triTopL[0], triTopL[1], gA.tS/4, gA.tS/2);
+            triRight = new gA.segment.make2(triTopR[0], triTopR[1], -gA.tS/4, gA.tS/2);
+
+            pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
+            pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
+            pTop = new gA.segment.make2(obj.x, obj.y, obj.w, 0);
+
+            if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pTop)) {
+              return 'spike';
             }
           }
-        }
 
-        if (gA.map.check[y][x] === 5 || gA.map.check[y][x] === 6) { //Spike Tile Values
-          if (px < tX+gA.tS && px + pw > tX && py < tY+gA.tS && py + ph > tY) {
-
-            // triLeft = new Segment(tX+gA.tS/2, tY+gA.tS, tX+gA.tS, tY);
-            triRight = new Segment(tX+gA.tS, tY, tX+gA.tS/2, tY+gA.tS);
-            triLeft = new Segment(tX, tY, tX+gA.tS/2, tY+gA.tS);
-            // triLeft = new Segment(tX+gA.tS/2, tY, tX, tY+gA.tS);
-
-            pLeft = new Segment(px, py, px, py+ph);
-            pRight = new Segment(px+pw, py, px+pw, py+ph);
-            pTop = new Segment(px, py, px+pw, py);
-
-            if(triRight.cross(pLeft) || triLeft.cross(pRight) || triLeft.cross(pTop)) {
-              gA.player.state.color = '#f00'; //Remove this once engine is used in another game
-            }
+          if (map[y][x] === 11) {
+            return 'wind';
           }
+
         }
 
       }
     }
+    return false;
   }
 
-  function smartMapInit() {
-    this.tX = 0;
-    this.tY = 0;
+  function collisionMap(x, y, w, h, gridSize) {
+    this.cTX;
+    this.cTY;
 
-    this.render = function() {
-      for(var y=0; y < gA.map.check.length; y+=1) {
-        for(var x=0; x < gA.map.check[y].length; x+=1) {
-          this.tX = (x * gA.tS) + (gA.cTX-1)*gA.tS;
-          this.tY = (y * gA.tS) + (gA.cTY-1)*gA.tS;
-
-          if (gA.map.check[y][x] === 1) {
-            gA.ctx.g.fillStyle = '#fac';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-          } else if (gA.map.check[y][x] === 2) {
-            gA.ctx.g.fillStyle = '#acf';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-          } else if (gA.map.check[y][x] === 3) {
-            gA.ctx.g.fillStyle = '#ff0';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-            gA.ctx.g.beginPath();
-            gA.ctx.g.moveTo(this.tX+gA.tS/2, this.tY);
-            gA.ctx.g.lineTo(this.tX, this.tY+gA.tS);
-            gA.ctx.g.lineTo(this.tX+gA.tS, this.tY+gA.tS);
-            gA.ctx.g.closePath();
-            gA.ctx.g.fillStyle = '#f66';
-            gA.ctx.g.fill();
-          } else if (gA.map.check[y][x] === 4) {
-            gA.ctx.g.fillStyle = '#ff0';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-            gA.ctx.g.beginPath();
-            gA.ctx.g.moveTo(this.tX+gA.tS/2, this.tY);
-            gA.ctx.g.lineTo(this.tX, this.tY+gA.tS);
-            gA.ctx.g.lineTo(this.tX+gA.tS, this.tY+gA.tS);
-            gA.ctx.g.closePath();
-            gA.ctx.g.fillStyle = '#66f';
-            gA.ctx.g.fill();
-          } else if (gA.map.check[y][x] === 5) {
-            gA.ctx.g.fillStyle = '#ff0';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-            gA.ctx.g.beginPath();
-            gA.ctx.g.moveTo(this.tX, this.tY);
-            gA.ctx.g.lineTo(this.tX+gA.tS/2, this.tY+gA.tS);
-            gA.ctx.g.lineTo(this.tX+gA.tS, this.tY);
-            gA.ctx.g.closePath();
-            gA.ctx.g.fillStyle = '#f66';
-            gA.ctx.g.fill();
-          } else if (gA.map.check[y][x] === 6) {
-            gA.ctx.g.fillStyle = '#ff0';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-            gA.ctx.g.beginPath();
-            gA.ctx.g.moveTo(this.tX, this.tY);
-            gA.ctx.g.lineTo(this.tX+gA.tS/2, this.tY+gA.tS);
-            gA.ctx.g.lineTo(this.tX+gA.tS, this.tY);
-            gA.ctx.g.closePath();
-            gA.ctx.g.fillStyle = '#66f';
-            gA.ctx.g.fill();
-          } else if (gA.map.check[y][x] === 0) {
-            gA.ctx.g.fillStyle = '#ff0';
-            gA.ctx.g.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-          }
-
-        }
-      }
-    };
-  }
-
-  function collisionMap() {
+    //Grid will need to be enlarged if player size is greater
+    var grid = [
+      [0,0,0],
+      [0,0,0],
+      [0,0,0]
+    ];
 
     this.update = function() {
-      gA.cTX = Math.round(gA.player.state.x/gA.tS);
-      gA.cTY = Math.round(gA.player.state.y/gA.tS);
+      this.cTX = Math.floor((x+w/2)/gA.tS);
+      this.cTY = Math.floor((y+h/2)/gA.tS);
 
-      gA.map.check = [
-        [0,0,0],
-        [0,0,0],
-        [0,0,0]
-      ];
+      this.grid = grid;
 
-      if (gA.map.curr[gA.cTY-1] !== undefined) {
-        gA.map.check[0][0] = (gA.map.curr[gA.cTY-1][gA.cTX-1]); // Top Left Corner
-        gA.map.check[0][1] = (gA.map.curr[gA.cTY-1][gA.cTX]); // Above
-        gA.map.check[0][2] = (gA.map.curr[gA.cTY-1][gA.cTX+1]); // Top Right Corner
+      if (gA.map.curr[this.cTY-1] !== undefined) {
+        this.grid[0][0] = (gA.map.curr[this.cTY-1][this.cTX-1]); // Top Left Corner
+        this.grid[0][1] = (gA.map.curr[this.cTY-1][this.cTX]); // Above
+        this.grid[0][2] = (gA.map.curr[this.cTY-1][this.cTX+1]); // Top Right Corner
       }
-      if (gA.map.curr[gA.cTY] !== undefined) {
-        gA.map.check[1][0] = (gA.map.curr[gA.cTY][gA.cTX-1]); // Left
-        // gA.map.check[1][1] = (gA.map.curr[gA.cTY][gA.cTX]); // Player // Not needed if just looking for spike edge collision
-        gA.map.check[1][2] = (gA.map.curr[gA.cTY][gA.cTX+1]); // Right
+      if (gA.map.curr[this.cTY] !== undefined) {
+        this.grid[1][0] = (gA.map.curr[this.cTY][this.cTX-1]); // Left
+        this.grid[1][1] = (gA.map.curr[this.cTY][this.cTX]); // Player // Not needed if just looking for spike edge collision
+        this.grid[1][2] = (gA.map.curr[this.cTY][this.cTX+1]); // Right
+      }
+      if (gA.map.curr[this.cTY+1] !== undefined) {
+        this.grid[2][0] = (gA.map.curr[this.cTY+1][this.cTX-1]); // Bottom Left Corner
+        this.grid[2][1] = (gA.map.curr[this.cTY+1][this.cTX]); // Below
+        this.grid[2][2] = (gA.map.curr[this.cTY+1][this.cTX+1]); // Bottom Right Corner
       }
 
-      if (gA.map.curr[gA.cTY+1] !== undefined) {
-        gA.map.check[2][0] = (gA.map.curr[gA.cTY+1][gA.cTX-1]); // Bottom Left Corner
-        gA.map.check[2][1] = (gA.map.curr[gA.cTY+1][gA.cTX]); // Below
-        gA.map.check[2][2] = (gA.map.curr[gA.cTY+1][gA.cTX+1]); // Bottom Right Corner
-      }
+      return {
+        grid: this.grid,
+        cTX: this.cTX,
+        cTY: this.cTY
+      };
     };
   }
-
 
   return {
     map: collisionMap, // Makes map for smarMove and smarMapInit
-    checkAround: smartMove, // Loops through collisionMap
-    view: smartMapInit // For showing highlights of potential collisions
+    check: smartMove // Loops through collisionMap
   };
 
 })();

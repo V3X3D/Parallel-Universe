@@ -1,39 +1,41 @@
 (function() {
   "use strict";
 
+  var i;
+
   window.gA = {};
-  gA.cW = 640; //Canvas Width
-  gA.cH = 448; //Canvas Height
-  gA.tS = 32; //Canvas Height
-  gA.cTX; //Stores players current 'x' tile (useful for map collision detection)
-  gA.cTY; //Stores players current 'y' tile (useful for map collision detection)
+  gA.scale = 1;
+  gA.tS = 32/gA.scale; //Canvas Height
+  gA.cW = 20*gA.tS; //Canvas Width
+  gA.cH = 14*gA.tS; //Canvas Height
 
   window.onload = function() {
 
     var Canvas = new gA.canvas.init();
+    var Background = new gA.background.init();
     var Map = new gA.map.init();
-    var CollisionView = new gA.collision.view();
-    var CollisionMap = new gA.collision.map();
+    var Blood = new gA.blood.init();
     var FPS = new gA.fps.init();
+
+    Map.render();
     function gameLoop() {
 
       //Game State Updating
+      // Background.update();
       gA.player.state.update();
-      CollisionMap.update();
-      // FPS.update();
+      Blood.update();
+      FPS.update();
 
       //Game Drawing
       Canvas.render();
-      Map.render();
-      CollisionView.render();
+      // Background.render();
       gA.player.state.render();
-      // FPS.render();
+      Blood.render();
+      FPS.render();
 
       window.requestAnimationFrame(gameLoop);
-      // setTimeout(gameLoop, 100);
     }
     gameLoop();
-
   };
 
 }());

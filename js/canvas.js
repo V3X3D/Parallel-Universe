@@ -2,18 +2,18 @@ gA.canvas = (function() {
   "use strict";
 
   // Setting Up The Canvas
-  function canvasInit() {
-    gA.ctx.gCanv.width = gA.cW;
-    gA.ctx.gCanv.height = gA.cH;
+  function init() {
 
     this.render = function() {
-      gA.ctx.g.fillStyle = '#fcd';
-      gA.ctx.g.fillRect(0, 0, gA.cW, gA.cH);
+      gA.ctx.b.fillStyle = '#faa';
+      gA.ctx.b.fillRect(0, 0, gA.cW, gA.cH);
+
+      gA.ctx.g.clearRect(0, 0, gA.cW, gA.cH);
     };
   }
 
   return {
-    init: canvasInit
+    init: init
   };
 
 })();
