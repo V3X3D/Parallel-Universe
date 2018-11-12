@@ -1,6 +1,5 @@
 gA.invertClr = function(color) { return color ^= 0xff; };
 
-
 gA.colorAjust = function(colors, flux, flip) {
   flip = flip || 127.5;
   for(i=0; i<colors.length; i+=1) {

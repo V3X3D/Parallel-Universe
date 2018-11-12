@@ -1,11 +1,10 @@
 gA.transitions = (function() {
   "use strict";
 
-  var fadeIn = true;
-  var A = 1;
+  var fadeIn = true, A = 1, once = false;
 
   function fadeToggle() {
-    if(fadeIn) fadeIn = false; 
+    if(fadeIn) fadeIn = false;
     else fadeIn = true;
   }
 
@@ -15,6 +14,7 @@ gA.transitions = (function() {
     this.bgRGB = '0,0,0';
 
     this.update = function() {
+      gA.heart.pace(1.15);
       if(!fadeIn) {
         if(A < 1) A += 0.035;
         if(A >= 1) {
@@ -29,8 +29,11 @@ gA.transitions = (function() {
         }
       }
       if(A <= 0 || A >= 1) {
-        gA.state.transition = false;
-        if(A >= 1) gA.nextLevel.go();
+        gA.transition = false;
+        if(A >= 1) {
+          if(gA.player.state.alive) gA.nextLevel.go();
+          else gA.nextLevel.go(-1);
+        }
       }
     };
 
@@ -40,12 +43,29 @@ gA.transitions = (function() {
     };
   };
 
-  var reset = function() { fadeIn = true; A = 1; };
-
-  return {
-    fade: fade,
-    reset: reset
+  var end = function() {
+    this.update = function() {
+      if(!once) {
+        once = true;
+        var timeOut = setTimeout(function() {
+          gA.cam.state.edgeLock = false;
+        }, 650);
+        var timeOut2 = setTimeout(function() {
+          gA.player.state.end = true;
+        }, 1750);
+      }
+    };
+    this.render = function() {
+      gA.bg.lowerAlpha();
+    };
   };
 
+  var reset = function() { fadeIn = true; A = 1; once = false; };
+
+  return {
+    fade: new fade(),
+    end: new end(),
+    reset: reset
+  };
 })();
 

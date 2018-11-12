@@ -98,25 +98,18 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fill();
-          } else if (gA.lvl.cur.map[y][x] === 11) {
-            // gA.ctx.m.fillStyle = fg;
-            // gA.ctx.m.fillRect(this.tX+gA.tS/4, this.tY, gA.tS/2, gA.tS/8);
           } else if (gA.lvl.cur.map[y][x] === 12) {
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fillRect(this.tX, this.tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
-            if(setup)
-              aniTiles.push(new gA.entity.windGen(this.tX, this.tY, fgArr));
+            if(setup) aniTiles.push(new gA.entity.windGen(this.tX, this.tY, fgArr));
           } else if (gA.lvl.cur.map[y][x] === 13) {
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fillRect(this.tX, this.tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
-            if(setup)
-              aniTiles.push(new gA.entity.windGen(this.tX, this.tY, bgArr));
+            if(setup) aniTiles.push(new gA.entity.windGen(this.tX, this.tY, bgArr));
           } else if (gA.lvl.cur.map[y][x] === 14) {
-            if(setup)
-              aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, bg, fg));
+            if(setup) aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, bg, fg));
           } else if (gA.lvl.cur.map[y][x] === 15) {
-            if(setup)
-              aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, fg, bg));
+            if(setup) aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, bg, fg));
           }
 
         }

@@ -46,6 +46,5 @@ gA.change = (function() {
     fade: fade,
     arrPush: arrPush
   };
-
 })();
 

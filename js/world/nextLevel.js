@@ -26,34 +26,32 @@ gA.nextLevel = (function() {
     //Load new level background
     gA.load = [];
     gA.lvl.cur.background();
-
     //Set new bg/fg color
     gA.bgClr = gA.lvl.cur.bgClr;
     gA.fgClr = gA.lvl.cur.fgClr();
-
     //Update new lvl.cur size for camera logic
     gA.cam.state.lvlW = gA.lvl.cur.map[0].length*gA.tS;
     gA.cam.state.lvlH = gA.lvl.cur.map.length*gA.tS;
-
     //Clear previous map
     gA.map.aniClear();
     gA.ctx.m.clearRect(0, 0, gA.cW, gA.cH);
 
     //Reset player for new level
-    gA.reset.level.update(true);
+    gA.hud.state.time = gA.lvl.list[gA.lvl.num].time; //Reset time
+    //Make sure time is reset before level
+    gA.reset.player();
     gA.cam.state.set();
 
     //Transition
-    gA.state.transition = true;
-
-    //Load new map
+    gA.transition = true;
+    //Load new map entities
     gA.map.init.render(true);
 
     //Start timer
+    gA.hud.state.freeze = false;
     gA.timer.reset();
   };
 
   return { go: goNextLevel };
-
 })();
 

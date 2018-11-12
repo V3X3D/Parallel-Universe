@@ -2,8 +2,7 @@ gA.collision = (function() {
   "use strict";
 
   //Line Segment Collision Test Vars
-  var triR, triL, pT, pL, pR, pB, triTL, triTR, triBM, triBL, triBR, triTM,
-    tX, tY, xPos, yPos;
+  var triR, triL, pT, pL, pR, pB, triTL, triTR, triBM, triBL, triBR, triTM, tX, tY, xPos, yPos, x, y;
 
   function rectRect(x1, y1, x2, y2, tSw, tSh, tS2w, tS2h) {
     tS2w = tS2w || tSw;
@@ -44,7 +43,7 @@ gA.collision = (function() {
     pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
     pT = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
-    if(triR.intersect(pL) || triL.intersect(pR) 
+    if(triR.intersect(pL) || triL.intersect(pR)
       || triL.intersect(pT) || triR.intersect(pT)) {
       return true;
     }
@@ -80,7 +79,7 @@ gA.collision = (function() {
     pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
     pT = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
-    if(triR.intersect(pL) || triL.intersect(pR) 
+    if(triR.intersect(pL) || triL.intersect(pR)
       || triL.intersect(pT) || triR.intersect(pT)) {
         return true;
     }
@@ -88,8 +87,8 @@ gA.collision = (function() {
   }
 
   function smartMove(obj, map, cTX, cTY, xDif, yDif) {
-    for(var y=0; y<map.length; y+=1) {
-      for(var x=0; x<map[y].length; x+=1) {
+    for(y=0; y < map.length; y+=1) {
+      for(x=0; x < map[y].length; x+=1) {
 
         tX = (x * gA.tS) + (cTX-1)*gA.tS;
         tY = (y * gA.tS) + (cTY-1)*gA.tS;
@@ -106,7 +105,13 @@ gA.collision = (function() {
           }
 
           /*SPIKE FULL CHECKS*/
-          if (map[y][x] === 3 || map[y][x] === 4) { //Spike facing up
+          if(map[y][x] === 3 || map[y][x] === 4) { //Spike facing up
+            /*This if statment does a quick check to make sure you aren't
+              landing on a block to the right of a spike which is needed since
+              this collistion loop goes left to right.*/
+            if(map[y][x+1] === 1 || map[y][x+1] === 2)
+              if(xPos > tX) return { tY: tY };
+
             if(fullSpikeUpCollision(tX, tY, obj)) return 'spike';
           } else if (map[y][x] === 5 || map[y][x] === 6) { //Spike facing down
             if(fullSpikeDownCollision(tX, tY, obj)) return 'spike';
@@ -122,14 +127,8 @@ gA.collision = (function() {
           /*WIND*/
           if (map[y][x] === 11 || map[y][x] === 12 || map[y][x] === 13) {
 
-            /* 
-              Fixes bug with entering walls to your rights side while colliding 
-              with them inside wind it causes you to warp to the top of the 
-              wall block if not patched.
-            */
-            if (map[y][x+1] === 1 || map[y][x+1] === 2) {
-              if (obj.action === 'right' && xPos+obj.w > tX+32) return true;
-            }
+            if (map[y][x+1] === 1 || map[y][x+1] === 2)
+              if(obj.action === 'right' && xPos+obj.w > tX+gA.tS) return true;
 
             //Ground to right - left works
             if (map[y][x+1] === 1 || map[y][x+1] === 2)
@@ -161,11 +160,22 @@ gA.collision = (function() {
             }
           }
 
-          if (map[y][x] === 14 || map[y][x] === 15) {
-            if(obj.type !== 'blood') {
-              if (xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4 && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
-                gA.state.transition = true;
-              }
+          if(map[y][x] === 14 && obj.type !== 'blood') {
+            if(xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4 && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
+              gA.transition = true;
+              gA.hud.state.freeze = true;
+              gA.sound.portal.currentTime = 0;
+              gA.sound.portal.play();
+            }
+          }
+          if(map[y][x] === 15 && obj.type !== 'blood') {
+            if(xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4 && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
+              gA.hud.state.freeze = true;
+              gA.player.state.locked = true;
+              gA.player.state.focused = false;
+              gA.player.state.focusAni = undefined;
+              gA.heart.stop();
+              gA.end = true;
             }
           }
 
@@ -176,48 +186,35 @@ gA.collision = (function() {
   }
 
   function collisionMap(x, y, w, h, gridSize) {
-    this.cTX;
-    this.cTY;
-
-    //Grid will need to be enlarged if player size is greater
     var grid = [
       [0,0,0],
       [0,0,0],
       [0,0,0]
-    ];
+    ], cTX, cTY;
 
-    this.update = function() {
-      this.cTX = Math.floor((x+w/2)/gA.tS);
-      this.cTY = Math.floor((y+h/2)/gA.tS);
+    cTX = Math.floor((x+w/2)/gA.tS);
+    cTY = Math.floor((y+h/2)/gA.tS);
 
-      this.grid = grid;
-
-      if (gA.lvl.cur.map[this.cTY-1] !== undefined) {
-        this.grid[0][0] = (gA.lvl.cur.map[this.cTY-1][this.cTX-1]); // Top Left Corner
-        this.grid[0][1] = (gA.lvl.cur.map[this.cTY-1][this.cTX]); // Above
-        this.grid[0][2] = (gA.lvl.cur.map[this.cTY-1][this.cTX+1]); // Top Right Corner
-      }
-      if (gA.lvl.cur.map[this.cTY] !== undefined) {
-        this.grid[1][0] = (gA.lvl.cur.map[this.cTY][this.cTX-1]); // Left
-        this.grid[1][1] = (gA.lvl.cur.map[this.cTY][this.cTX]); // Player //Needed for things like wind
-        this.grid[1][2] = (gA.lvl.cur.map[this.cTY][this.cTX+1]); // Right
-      }
-      if (gA.lvl.cur.map[this.cTY+1] !== undefined) {
-        this.grid[2][0] = (gA.lvl.cur.map[this.cTY+1][this.cTX-1]); // Bottom Left Corner
-        this.grid[2][1] = (gA.lvl.cur.map[this.cTY+1][this.cTX]); // Below
-        this.grid[2][2] = (gA.lvl.cur.map[this.cTY+1][this.cTX+1]); // Bottom Right Corner
-      }
-
-      return {
-        grid: this.grid,
-        cTX: this.cTX,
-        cTY: this.cTY
-      };
-    };
+    if (gA.lvl.cur.map[cTY-1] !== undefined) {
+      grid[0][0] = (gA.lvl.cur.map[cTY-1][cTX-1]); // Top Left Corner
+      grid[0][1] = (gA.lvl.cur.map[cTY-1][cTX]); // Above
+      grid[0][2] = (gA.lvl.cur.map[cTY-1][cTX+1]); // Top Right Corner
+    }
+    if (gA.lvl.cur.map[cTY] !== undefined) {
+      grid[1][0] = (gA.lvl.cur.map[cTY][cTX-1]); // Left
+      grid[1][1] = (gA.lvl.cur.map[cTY][cTX]); // Player //Needed for things like wind
+      grid[1][2] = (gA.lvl.cur.map[cTY][cTX+1]); // Right
+    }
+    if (gA.lvl.cur.map[cTY+1] !== undefined) {
+      grid[2][0] = (gA.lvl.cur.map[cTY+1][cTX-1]); // Bottom Left Corner
+      grid[2][1] = (gA.lvl.cur.map[cTY+1][cTX]); // Below
+      grid[2][2] = (gA.lvl.cur.map[cTY+1][cTX+1]); // Bottom Right Corner
+    }
+    return { grid, cTX, cTY };
   }
 
   return {
-    map: collisionMap, // Makes map for smarMove and smarMapInit
+    map: collisionMap, // Makes map for smarMove
     check: smartMove // Loops through collisionMap
   };
 

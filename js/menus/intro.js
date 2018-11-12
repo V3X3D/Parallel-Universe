@@ -9,6 +9,8 @@ gA.intro = (function() {
       if(seq3.action()) return true;
     };
     this.render = function() {
+      gA.ctx.g.fillStyle = '#fff';
+      gA.ctx.g.fillRect(0, 0, gA.cW, gA.cH);
       seq1.draw();
       seq2.draw();
     };
@@ -60,5 +62,4 @@ gA.intro = (function() {
   };
 
   return { init: init };
-
 })();

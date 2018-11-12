@@ -16,11 +16,15 @@ gA.cursor = (function() {
       else if(this.curX >= this.curMaxX) this.curVX = -this.curVX;
       this.curX += this.curVX;
 
-      if(gA.key.down) {
+      if(gA.key.down && !gA.noHold.down) {
+        gA.noHold.down = true;
+        gA.sound.cursor.play();
         gA.key.down = false;
         this.share.selected += 1;
         if(this.share.selected >= opts.length) this.share.selected = 0;
-      } else if(gA.key.up) {
+      } else if(gA.key.up && !gA.noHold.up) {
+        gA.noHold.up = true;
+        gA.sound.cursor.play();
         gA.key.up = false;
         this.share.selected -= 1;
         if(this.share.selected < 0) this.share.selected = opts.length-1;
@@ -29,6 +33,7 @@ gA.cursor = (function() {
 
       for(var k=0; k<opts.length; k+=1) {
         if(opts[k].y === this.curY && gA.key.select) {
+          gA.sound.cursor.play();
           gA.key.select = false;
           opts[k].animation(context, k);
         }
@@ -44,8 +49,5 @@ gA.cursor = (function() {
     };
   };
 
-  return {
-    state: state
-  };
-
+  return { state: state };
 })();

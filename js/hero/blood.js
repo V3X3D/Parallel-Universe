@@ -1,10 +1,7 @@
 gA.blood = (function() {
   "use strict";
 
-  var array = [];
-
-  var inc = 50;
-  var i;
+  var inc=50, array=[], i, grid;
 
   var make = function(range) {
     this.type = 'blood';
@@ -20,12 +17,12 @@ gA.blood = (function() {
     this.invert = Math.random() < 0.5 ? -1 : 1;
 
     if(!gA.lvl.cur.bloodClr) {
-      this.RGBorig = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
+      this.RGBo = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = gA.colorAjust(this.RGB, inc);
 
       if(this.invert === 1) {
-        if(gA.invertClr(this.RGBorig[0]) === gA.fgClr.R && gA.invertClr(this.RGBorig[1]) === gA.fgClr.G && gA.invertClr(this.RGBorig[2]) === gA.fgClr.B) {
+        if(gA.invertClr(this.RGBo[0]) === gA.fgClr.R && gA.invertClr(this.RGBo[1]) === gA.fgClr.G && gA.invertClr(this.RGBo[2]) === gA.fgClr.B) {
           this.RGB = [gA.invertClr(this.RGB[0]), gA.invertClr(this.RGB[1]), gA.invertClr(this.RGB[2])];
         } else {
           this.RGB = [gA.fgClr.R, gA.fgClr.G, gA.fgClr.B];
@@ -37,7 +34,7 @@ gA.blood = (function() {
       if(!gA.lvl.cur.bloodShft)
         this.RGB = gA.colorAjust(this.RGB, 0);
       else
-        this.RGB = gA.colorAjust(this.RGB, Math.floor(Math.random() * (gA.lvl.cur.bloodShft.max - gA.lvl.cur.bloodShft.min + 1)) + gA.lvl.cur.bloodShft.min);
+        this.RGB = gA.colorAjust(this.RGB, Math.floor(Math.random()*(gA.lvl.cur.bloodShft.max - gA.lvl.cur.bloodShft.min + 1))+gA.lvl.cur.bloodShft.min);
     }
     this.color = 'rgba('+ this.RGB[0] +','+this.RGB[1]+','+ this.RGB[2] +',1)';
 
@@ -53,12 +50,8 @@ gA.blood = (function() {
 
     array.push(this);
 
-    var grid;
-
     this.update = function() {
-
-      //Make collision grid + get map tilePos
-      grid = new gA.collision.map(this.x, this.y, this.w, this.h).update();
+      grid = new gA.collision.map(this.x, this.y, this.w, this.h);
 
       if(this.jump) jumpActive(this, grid);
       else if (this.wind) windActive(this, grid);
@@ -68,11 +61,6 @@ gA.blood = (function() {
       this.x += this.vx;
     };
     this.render = function() {
-      // var collisionView = new gA.viewCollide.viewMap(grid.grid, grid.cTX, grid.cTY);
-      // collisionView.render();
-      // var spikeCollisionView = new gA.viewCollide.viewSpikeTouch(this, grid.grid, grid.cTX, grid.cTY);
-      // spikeCollisionView.render();
-
       gA.ctx.g.fillStyle = this.color;
       gA.ctx.g.fillRect(this.x, this.y, this.w, this.h);
     };
@@ -142,19 +130,11 @@ gA.blood = (function() {
   }
 
   var init = function() {
-    var i;
-
-    this.update = function() {
-      for(i=0; i<array.length; i+=1) array[i].update();
-    };
-    this.render = function() {
-      for(i= 0; i<array.length; i+=1) array[i].render();
-    };
+    this.update = function() {for(i=0;i<array.length;i+=1) array[i].update();};
+    this.render = function() {for(i= 0;i<array.length;i+=1) array[i].render();};
   };
 
-  var arrayClear = function() {
-    array = [];
-  };
+  var arrayClear = function() { array = []; };
 
   return {
     make: make,

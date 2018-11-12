@@ -2,7 +2,7 @@ gA.bg = (function() {
   "use strict";
 
   //All panes
-  var array = [];
+  var array = [], i, alpha = 1;
 
   var pane = function(seq) {
     this.x = seq.x;
@@ -13,15 +13,13 @@ gA.bg = (function() {
 
     this.logic = function() { this.seq.logic(); };
     this.draw = function() {
-      gA.ctx.b.fillStyle = 'rgb('+gA.fgClr.R+','+gA.fgClr.G+','+gA.fgClr.B+')';
+      gA.ctx.b.fillStyle = 'rgb('+gA.fgClr.R+','+gA.fgClr.G+','+gA.fgClr.B+', '+alpha+')';
       this.seq.draw();
     };
   };
 
   //For updating and render panes
   var init = function() {
-    var i;
-
     this.update = function() {
       array = [];
       for(i=0; i<gA.load.length; i+=1) {
@@ -34,10 +32,14 @@ gA.bg = (function() {
     };
   };
 
+  var lowerAlpha = function() { alpha -= 0.035; };
+  var maxAlpha = function() { alpha = 1; };
+
   return {
     init: new init,
-    pane: pane
+    pane: pane,
+    lowerAlpha: lowerAlpha,
+    maxAlpha: maxAlpha
   };
-
 })();
 

@@ -16,16 +16,17 @@
   gA.state = {
     titleScreen: true,
     pauseMenu: false,
-    gameRunning: false,
-    transition: false
+    gameRunning: false
   };
+  gA.end = false;
+  gA.transition = false;
 
   window.onload = function() {
 
-    var Canvas = new gA.canvas.init();
-    var Blood = new gA.blood.init();
-    var FPS = new gA.fps.init();
-    var Transition = new gA.transitions.fade();
+    var Canvas = new gA.canvas.init(),
+      Blood = new gA.blood.init(),
+      FPS = new gA.fps.init(),
+      LevelText = new gA.lvl.text.init();
 
     gA.map.init.render(true);
     function gameLoop() {
@@ -38,7 +39,9 @@
         gA.player.state.update();
         gA.map.animated.update();
         Blood.update();
-        if(gA.state.transition) Transition.update();
+        gA.hud.state.update();
+        if(gA.transition) gA.transitions.fade.update();
+        if(gA.end) gA.transitions.end.update();
         if(gA.key.esc && !gA.pause.run.menu.done && !gA.noHold.esc) {
           gA.state.pauseMenu = true;
           gA.state.gameRunning = false;
@@ -47,21 +50,20 @@
         }
 
         /*GAME DRAWING*/
+        gA.bg.init.render();
+
         gA.ctx.g.save();
         gA.ctx.g.translate(-gA.cam.state.x, -gA.cam.state.y);
+          gA.map.init.render();
           gA.player.state.render();
           Blood.render();
           gA.map.animated.render();
         gA.ctx.g.restore();
 
-        gA.bg.init.render();
-
-        gA.ctx.m.save();
-        gA.ctx.m.translate(-gA.cam.state.x, -gA.cam.state.y);
-          gA.map.animated.render();
-          gA.map.init.render();
-        gA.ctx.m.restore();
-        if(gA.state.transition) Transition.render();
+        gA.hud.state.render();
+        LevelText.render();
+        if(gA.transition) gA.transitions.fade.render();
+        if(gA.end) gA.transitions.end.render();
       } else if(gA.state.pauseMenu || gA.state.titleScreen) {
         if(gA.state.pauseMenu) {
           gA.pause.run.menu.update();
@@ -71,9 +73,11 @@
           gA.title.run.menu.render();
           gA.transitions.reset();
         }
-        gA.change.state.update();
-        gA.change.state.render();
+        // gA.change.state.update();
+        // gA.change.state.render();
       }
+      gA.change.state.update();
+      gA.change.state.render();
 
       // FPS.update();
       // FPS.render();
@@ -81,7 +85,7 @@
       // gA.ctx.v.drawImage(gA.ctx.gCanv, 0, 0, gA.cW*gA.scale, gA.cH*gA.scale);
 
       window.requestAnimationFrame(gameLoop);
-      // setTimeout(gameLoop, 40);
+      // setTimeout(gameLoop, 30);
     }
     gameLoop();
   };

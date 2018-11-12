@@ -9,37 +9,23 @@ gA.segment = (function() {
     this.vecx = vecx;
     this.vecy = vecy;
 
-    var intersectX;
-    var intersectY;
+    var intersectX, intersectY;
 
     function same_sign(a, b) {return a*b >= 0;}
 
-    //This is a dev function (remove it in the end)
-    this.draw = function(width, color) {
-      gA.ctx.g.beginPath();
-      gA.ctx.g.lineWidth = width;
-      gA.ctx.g.moveTo(this.x, this.y);
-      gA.ctx.g.lineTo(this.x+this.vecx, this.y+this.vecy);
-      gA.ctx.g.strokeStyle = color;
-      gA.ctx.g.stroke();
-    };
-
     this.intersect = function(segment) {
+
       //line a
-      var x1 = this.x;
-      var y1 = this.y;
-      var x2 = this.x + this.vecx;
-      var y2 = this.y + this.vecy;
-
+      var x1 = this.x,
+        y1 = this.y,
+        x2 = this.x + this.vecx,
+        y2 = this.y + this.vecy,
       //line b
-      var x3 = segment.x;
-      var y3 = segment.y;
-      var x4 = segment.x + segment.vecx;
-      var y4 = segment.y + segment.vecy;
-
-      var a1, a2, b1, b2, c1, c2;
-      var r1, r2, r3, r4;
-      var denom, offset, num;
+        x3 = segment.x,
+        y3 = segment.y,
+        x4 = segment.x + segment.vecx,
+        y4 = segment.y + segment.vecy,
+        a1, a2, b1, b2, c1, c2, r1, r2, r3, r4, denom, offset, num;
 
       a1 = y2 - y1;
       b1 = x1 - x2;
@@ -79,5 +65,4 @@ gA.segment = (function() {
     make: make,
     intersectionArray: intersectionArray
   };
-
 })();

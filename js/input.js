@@ -13,6 +13,7 @@ gA.input = (function() {
   };
   gA.noHold = {
     up: false,
+    down: false,
     esc: false
   };
 
@@ -33,11 +34,10 @@ gA.input = (function() {
       else if(key !== 13) gA.key.up = true;
     }
 
-    // console.log(key);
-    if(key === 27) gA.key.esc = true;
+    if(key === 27 && !gA.end) gA.key.esc = true;
 
-    if (!gA.player.state.alive) {
-      switch (key) { //Make sure not hitting any default movement keys to reset
+    if (!gA.player.state.alive && gA.state.gameRunning) {
+      switch (key) {
         case 32:
         case 37:
         case 38:
@@ -47,10 +47,24 @@ gA.input = (function() {
         case 87:
         case 27:
         case 116:
+        case 83:
+        case 40:
           break;
 
         default:
-          gA.reset.level.update();
+          if(!gA.end) {
+            gA.reset.player();
+          } else {
+            gA.change.arrPush(new gA.change.fade('out', function(){
+              gA.state.gameRunning = false;
+              gA.state.titleScreen = true;
+              gA.title.run.menu.called = true;
+              gA.cam.state.edgeLock = true;
+              gA.player.state.end = false;
+              gA.end = false;
+              gA.bg.maxAlpha();
+            }, 0.035));
+          }
           break;
       }
     }
@@ -69,6 +83,7 @@ gA.input = (function() {
       gA.key.right = false;
     } else if (key === 83 || key === 40) {
       gA.key.down = false;
+      gA.noHold.down = false;
     }
 
     if(key === 27) {gA.key.esc = false; gA.noHold.esc = false;}

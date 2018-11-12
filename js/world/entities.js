@@ -6,7 +6,8 @@ gA.entity = (function() {
     this.rotation = 45;
     this.rotation2 = 0;
     this.rate = 2;
-    this.s = gA.tS/2;
+    this.s = gA.tS/4;
+    this.s2 = gA.tS/2;
 
     this.delay = 0;
 
@@ -22,15 +23,21 @@ gA.entity = (function() {
     };
 
     this.draw = function() {
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
-      gA.ctx.g.rotate(this.rotation*Math.PI/180);
-      gA.ctx.g.fillStyle = bColor;
-      gA.ctx.g.fillRect(-gA.tS/4, -gA.tS/4, gA.tS/2, gA.tS/2);
-
+      gA.ctx.g.lineWidth = 2;
       gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
       gA.ctx.g.rotate(this.rotation2*Math.PI/180);
       gA.ctx.g.fillStyle = fColor;
+      gA.ctx.g.fillRect(-this.s2/2, -this.s2/2, this.s2, this.s2);
+      gA.ctx.g.strokeStyle = bColor;
+      gA.ctx.g.strokeRect(-this.s2/2, -this.s2/2, this.s2, this.s2);
+
+      gA.ctx.g.lineWidth = 1;
+      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
+      gA.ctx.g.rotate(this.rotation*Math.PI/180);
+      gA.ctx.g.fillStyle = bColor;
       gA.ctx.g.fillRect(-this.s/2, -this.s/2, this.s, this.s);
+      gA.ctx.g.strokeStyle = fColor;
+      gA.ctx.g.strokeRect(-this.s/2, -this.s/2, this.s, this.s);
 
       gA.ctx.g.setTransform(1,0,0,1,0,0);
     };
@@ -105,6 +112,5 @@ gA.entity = (function() {
     levelWarp: levelWarp,
     windGen: windGen
   };
-
 })();
 
