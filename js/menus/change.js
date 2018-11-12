@@ -41,7 +41,7 @@ gA.change = (function() {
   };
   var arrPush = function(content) { array.push(content); };
 
-  return { 
+  return {
     state: new state,
     fade: fade,
     arrPush: arrPush

@@ -16,27 +16,21 @@ gA.transitions = (function() {
 
     this.update = function() {
       if(!fadeIn) {
-        if(A < 1) {
-          A += 0.035; 
-          gA.player.state.locked = true;
-        }
-        if(A > 1) {
+        if(A < 1) A += 0.035;
+        if(A >= 1) {
           fadeToggle();
           A = 1;
         }
       } else {
-        if(A > 0) {
-          A -= 0.035; 
-          gA.player.state.locked = false;
-        }
-        if(A < 0) {
+        if(A > 0) A -= 0.035;
+        if(A <= 0) {
           fadeToggle();
           A = 0;
         }
       }
       if(A <= 0 || A >= 1) {
         gA.state.transition = false;
-        if(A === 1) gA.nextLevel.go();
+        if(A >= 1) gA.nextLevel.go();
       }
     };
 

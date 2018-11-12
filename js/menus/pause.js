@@ -2,6 +2,7 @@ var closeMenu = function(obj) {
   setTimeout(function() { resetMenu(obj); }.bind(obj), 300);
   gA.state.pauseMenu = false;
   gA.state.gameRunning = true;
+  gA.timer.resume();
 };
 var resetMenu = function(obj) {
   obj.done = false;
@@ -10,41 +11,8 @@ var resetMenu = function(obj) {
   gA.state.pauseMenu = false;
 };
 
-gA.pause = (function() {
+gA.pause.run = (function() {
   "use strict";
-
-  gA.ctx.g.font = ''+gA.cW/22+'px monospace';
-  var options = {
-    opt0: {
-      text: 'Continue',
-      y: gA.cH/2+gA.tS+16,
-      animation:function(obj) { closeMenu(obj); }
-    },
-    opt1: {
-      text: 'Stats',
-      y: gA.cH/2+gA.tS*2+16,
-      animation: function(obj) { }
-    },
-    opt2: {
-      text: 'Exit',
-      y: gA.cH/2+gA.tS*3+16,
-      animation: function(obj, key) {
-        gA.change.arrPush(new gA.change.fade('out', options[key].action.bind(obj), 0.035));
-      },
-      action: function(obj) { 
-        // resetMenu(obj);
-        gA.state.pauseMenu = false;
-        gA.map.aniClear();
-        gA.state.titleScreen = true;
-        gA.title.menu.fadeIn = true;
-      }
-    }
-  };
-  var shared = {
-    x: gA.cW-gA.ctx.g.measureText('Continue').width-gA.tS,
-    selected: 0,
-    size: 0
-  };
 
   var menu = function() {
     this.bgRGB;
@@ -52,18 +20,17 @@ gA.pause = (function() {
     this.color;
     this.color2;
     this.done = false;
+    this.fade = false;
     this.spd = 48;
     this.x1 = -gA.cW;
     this.x2 = gA.cW;
+    this.state = { home: true, stats: false };
 
-    for(var key in options)
-      if (options.hasOwnProperty(key)) shared.size += 1;
-
-    var cursor = new gA.cursor.state(options, shared, this);
+    this.cursor = new gA.cursor.state(gA.pause.home.list, gA.pause.home.shared, this);
 
     this.update = function() {
 
-      this.bgRGB = [gA.level.bgClr.R, gA.level.bgClr.G, gA.level.bgClr.B];
+      this.bgRGB = [gA.lvl.cur.bgClr.R, gA.lvl.cur.bgClr.G, gA.lvl.cur.bgClr.B];
       this.fgRGB = [gA.fgClr.R, gA.fgClr.G, gA.fgClr.B];
       this.bgRGB = gA.colorAjust(this.bgRGB, 30);
       this.fgRGB = gA.colorAjust(this.fgRGB, 30);
@@ -77,9 +44,12 @@ gA.pause = (function() {
       if(this.x2 <= 0) {this.x2 = 0; this.done = true;}
       else {this.x2 -= this.spd;}
 
-      if(this.done) {
-        if(gA.key.esc) closeMenu(this);
-        else cursor.update();
+      if(this.done && !this.fade) {
+        if(this.state.home) {
+          gA.pause.home.update.bind(this)();
+        } else if (this.state.stats) {
+          gA.pause.stats.update.bind(this)();
+        }
       }
     };
     this.render = function() {
@@ -90,29 +60,16 @@ gA.pause = (function() {
 
       //Text
       if(this.done) {
-        //Top
-        gA.ctx.g.font = ''+gA.cW/16+'px monospace';
-        gA.ctx.g.fillStyle = this.color2;
-        gA.ctx.g.fillText('Paused', gA.tS, gA.cH/2-gA.tS);
-        var offset = gA.ctx.g.measureText('Paused').width;
-        gA.ctx.g.font = ''+gA.cW/32+'px monospace';
-        offset = offset-gA.ctx.g.measureText('Level: '+gA.lvlNum+'').width;
-        gA.ctx.g.fillText('Level: '+gA.lvlNum+'', offset+gA.tS, gA.cH/2-gA.tS/3);
-        //Bottom
-        gA.ctx.g.font = ''+gA.cW/22+'px monospace';
-        gA.ctx.g.fillStyle = this.color;
-        for(var key in options) {
-          if (options.hasOwnProperty(key)) {
-            gA.ctx.g.fillText(options[key].text, shared.x, options[key].y);
-          }
+        if(this.state.home) {
+          gA.pause.home.render.bind(this)();
+        } else if(this.state.stats) {
+          gA.pause.stats.render.bind(this)();
         }
-
-        cursor.render();
       }
     };
   };
 
-  return { 
+  return {
     menu: new menu(),
     closeMenu: closeMenu,
     resetMenu: resetMenu

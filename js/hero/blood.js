@@ -19,7 +19,7 @@ gA.blood = (function() {
 
     this.invert = Math.random() < 0.5 ? -1 : 1;
 
-    if(!gA.level.bloodClr) {
+    if(!gA.lvl.cur.bloodClr) {
       this.RGBorig = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = gA.colorAjust(this.RGB, inc);
@@ -33,11 +33,11 @@ gA.blood = (function() {
         }
       }
     } else {
-      this.RGB = [gA.level.bloodClr.R, gA.level.bloodClr.G, gA.level.bloodClr.B];
-      if(!gA.level.bloodShft)
+      this.RGB = [gA.lvl.cur.bloodClr.R, gA.lvl.cur.bloodClr.G, gA.lvl.cur.bloodClr.B];
+      if(!gA.lvl.cur.bloodShft)
         this.RGB = gA.colorAjust(this.RGB, 0);
       else
-        this.RGB = gA.colorAjust(this.RGB, Math.floor(Math.random() * (gA.level.bloodShft.max - gA.level.bloodShft.min + 1)) + gA.level.bloodShft.min);
+        this.RGB = gA.colorAjust(this.RGB, Math.floor(Math.random() * (gA.lvl.cur.bloodShft.max - gA.lvl.cur.bloodShft.min + 1)) + gA.lvl.cur.bloodShft.min);
     }
     this.color = 'rgba('+ this.RGB[0] +','+this.RGB[1]+','+ this.RGB[2] +',1)';
 

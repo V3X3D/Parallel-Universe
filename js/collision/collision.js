@@ -26,7 +26,10 @@ gA.collision = (function() {
     pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
     pB = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
-    if(triR.intersect(pL) || triL.intersect(pR) || triL.intersect(pB)) return true;
+    if(triR.intersect(pL) || triL.intersect(pR)
+      || triL.intersect(pB) || triR.intersect(pB)) {
+      return true;
+    }
     return false;
   }
   function fullSpikeDownCollision(tX, tY, obj) {
@@ -59,7 +62,10 @@ gA.collision = (function() {
     pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
     pB = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
-    if(triR.intersect(pL) || triL.intersect(pR) || triL.intersect(pB)) return true;
+    if(triR.intersect(pL) || triL.intersect(pR)
+      || triL.intersect(pB) || triR.intersect(pB)) {
+      return true;
+    }
     return false;
   }
   function halfSpikeDownCollision(tX, tY, obj) {
@@ -186,20 +192,20 @@ gA.collision = (function() {
 
       this.grid = grid;
 
-      if (gA.level.map[this.cTY-1] !== undefined) {
-        this.grid[0][0] = (gA.level.map[this.cTY-1][this.cTX-1]); // Top Left Corner
-        this.grid[0][1] = (gA.level.map[this.cTY-1][this.cTX]); // Above
-        this.grid[0][2] = (gA.level.map[this.cTY-1][this.cTX+1]); // Top Right Corner
+      if (gA.lvl.cur.map[this.cTY-1] !== undefined) {
+        this.grid[0][0] = (gA.lvl.cur.map[this.cTY-1][this.cTX-1]); // Top Left Corner
+        this.grid[0][1] = (gA.lvl.cur.map[this.cTY-1][this.cTX]); // Above
+        this.grid[0][2] = (gA.lvl.cur.map[this.cTY-1][this.cTX+1]); // Top Right Corner
       }
-      if (gA.level.map[this.cTY] !== undefined) {
-        this.grid[1][0] = (gA.level.map[this.cTY][this.cTX-1]); // Left
-        this.grid[1][1] = (gA.level.map[this.cTY][this.cTX]); // Player //Needed for things like wind
-        this.grid[1][2] = (gA.level.map[this.cTY][this.cTX+1]); // Right
+      if (gA.lvl.cur.map[this.cTY] !== undefined) {
+        this.grid[1][0] = (gA.lvl.cur.map[this.cTY][this.cTX-1]); // Left
+        this.grid[1][1] = (gA.lvl.cur.map[this.cTY][this.cTX]); // Player //Needed for things like wind
+        this.grid[1][2] = (gA.lvl.cur.map[this.cTY][this.cTX+1]); // Right
       }
-      if (gA.level.map[this.cTY+1] !== undefined) {
-        this.grid[2][0] = (gA.level.map[this.cTY+1][this.cTX-1]); // Bottom Left Corner
-        this.grid[2][1] = (gA.level.map[this.cTY+1][this.cTX]); // Below
-        this.grid[2][2] = (gA.level.map[this.cTY+1][this.cTX+1]); // Bottom Right Corner
+      if (gA.lvl.cur.map[this.cTY+1] !== undefined) {
+        this.grid[2][0] = (gA.lvl.cur.map[this.cTY+1][this.cTX-1]); // Bottom Left Corner
+        this.grid[2][1] = (gA.lvl.cur.map[this.cTY+1][this.cTX]); // Below
+        this.grid[2][2] = (gA.lvl.cur.map[this.cTY+1][this.cTX+1]); // Bottom Right Corner
       }
 
       return {

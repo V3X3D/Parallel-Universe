@@ -4,18 +4,28 @@ gA.reset = (function() {
   var resetLevel = function() {
 
     this.update = function(noRespawn) {
-      gA.player.state.x = gA.level.player.x;
-      gA.player.state.y = gA.level.player.y;
+      gA.player.state.x = gA.lvl.cur.player.x;
+      gA.player.state.y = gA.lvl.cur.player.y;
 
       gA.player.state.alive = true;
       gA.player.state.jump = false;
       gA.player.state.wind = false;
       gA.player.state.grav = 1;
 
-      if(!noRespawn) {
+      if(!gA.lvl.cur.player.color) {
+        gA.player.state.R = gA.fgClr.R;
+        gA.player.state.G = gA.fgClr.G;
+        gA.player.state.B = gA.fgClr.B;
+      } else {
+        gA.player.state.R = gA.lvl.cur.player.color[0];
+        gA.player.state.G = gA.lvl.cur.player.color[1];
+        gA.player.state.B = gA.lvl.cur.player.color[2];
+      }
+
+      // if(!noRespawn) {
         gA.player.state.spawnAni = new spawnAnimation();
         gA.player.state.respawn = true;
-      }
+      // }
 
       gA.blood.arrayClear();
     };

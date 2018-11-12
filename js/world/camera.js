@@ -6,8 +6,8 @@ gA.cam = (function() {
     this.curY;
     this.x = 0;
     this.y = 0;
-    this.lvlW = gA.level.map[0].length*gA.tS;
-    this.lvlH = gA.level.map.length*gA.tS;
+    this.lvlW = gA.lvl.cur.map[0].length*gA.tS;
+    this.lvlH = gA.lvl.cur.map.length*gA.tS;
 
     this.shake = false;
     this.invert = Math.random() < 0.5 ? -1 : 1;

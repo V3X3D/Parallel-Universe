@@ -6,8 +6,8 @@ gA.player = (function() {
 
   function playerInit() {
     this.alive = true;
-    this.x = gA.level.player.x;
-    this.y = gA.level.player.y;
+    this.x = gA.lvl.cur.player.x;
+    this.y = gA.lvl.cur.player.y;
     this.w = gA.tS;
     this.h = gA.tS;
     this.spd = 4;
@@ -19,15 +19,15 @@ gA.player = (function() {
     this.vyConst = -12;
     this.vy = this.vyConst;
 
-    if(!gA.level.player.color) {
+    if(!gA.lvl.cur.player.color) {
       this.R = gA.fgClr.R;
       this.G = gA.fgClr.G;
       this.B = gA.fgClr.B;
       this.A = 1;
     } else {
-      this.R = gA.level.player.color[0];
-      this.G = gA.level.player.color[1];
-      this.B = gA.level.player.color[2];
+      this.R = gA.lvl.cur.player.color[0];
+      this.G = gA.lvl.cur.player.color[1];
+      this.B = gA.lvl.cur.player.color[2];
       this.A = 1;
     }
     this.color = 'rgba('+this.R+','+this.G+','+this.B+','+this.A+')';
@@ -51,7 +51,6 @@ gA.player = (function() {
       grid = new gA.collision.map(this.x, this.y, this.w, this.h).update();
 
       if(this.alive && !gA.state.transition && !this.locked) {
-        // console.log(this.grav);
 
         //Jump and Gravity
         if (this.wind) windActive(this, grid);
@@ -210,7 +209,11 @@ gA.player = (function() {
   function death(obj) {
     if(obj.alive)  {
       gA.deathNum += 1;
-      gA.level.deaths += 1;
+      gA.lvl.cur.curDeaths += 1;
+      // gA.level.totalDeaths += 1;
+
+      if(gA.lvl.cur.curDeaths > gA.lvl.cur.maxDeaths || isNaN(gA.lvl.cur.maxDeaths))
+        gA.lvl.cur.maxDeaths = gA.lvl.cur.curDeaths;
 
       gA.cam.state.shake = true;
       gA.cam.state.offset = obj.grav;

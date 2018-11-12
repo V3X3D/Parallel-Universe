@@ -23,18 +23,18 @@ gA.map = (function() {
       bgArr = gA.bgClr;
       fgArr = {R: gA.fgClr.R, G: gA.fgClr.G, B: gA.fgClr.B};
 
-      for(var y=0; y<gA.level.map.length; y+=1) {
-        for(var x=0; x<gA.level.map[y].length; x+=1) {
+      for(var y=0; y<gA.lvl.cur.map.length; y+=1) {
+        for(var x=0; x<gA.lvl.cur.map[y].length; x+=1) {
           this.tX = x * gA.tS;
           this.tY = y * gA.tS;
 
-          if (gA.level.map[y][x] === 1) {
+          if (gA.lvl.cur.map[y][x] === 1) {
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-          } else if (gA.level.map[y][x] === 2) {
+          } else if (gA.lvl.cur.map[y][x] === 2) {
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fillRect(this.tX, this.tY, gA.tS, gA.tS);
-          } else if (gA.level.map[y][x] === 3) { //Spike FULL Up
+          } else if (gA.lvl.cur.map[y][x] === 3) { //Spike FULL Up
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(this.tX+gA.tS/2, this.tY);
             gA.ctx.m.lineTo(this.tX, this.tY+gA.tS);
@@ -42,7 +42,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 4) { //Spike FULL Up
+          } else if (gA.lvl.cur.map[y][x] === 4) { //Spike FULL Up
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(this.tX+gA.tS/2, this.tY);
             gA.ctx.m.lineTo(this.tX, this.tY+gA.tS);
@@ -50,7 +50,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 5) { //Spike FULL Down
+          } else if (gA.lvl.cur.map[y][x] === 5) { //Spike FULL Down
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(this.tX, this.tY);
             gA.ctx.m.lineTo(this.tX+gA.tS/2, this.tY+gA.tS);
@@ -58,7 +58,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 6) { //Spike FULL Down
+          } else if (gA.lvl.cur.map[y][x] === 6) { //Spike FULL Down
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(this.tX, this.tY);
             gA.ctx.m.lineTo(this.tX+gA.tS/2, this.tY+gA.tS);
@@ -66,7 +66,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 7) { //Spike HALF Up
+          } else if (gA.lvl.cur.map[y][x] === 7) { //Spike HALF Up
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(this.tX+gA.tS/2, this.tY+gA.tS/2); //Top Mid
             gA.ctx.m.lineTo(( this.tX )+gA.tS/4, this.tY+gA.tS); //Bottom Left
@@ -74,7 +74,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 8) { //Spike HALF Up
+          } else if (gA.lvl.cur.map[y][x] === 8) { //Spike HALF Up
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(this.tX+gA.tS/2, this.tY+gA.tS/2); //Top Mid
             gA.ctx.m.lineTo(( this.tX )+gA.tS/4, this.tY+gA.tS); //Bottom Left
@@ -82,7 +82,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 9) { //Spike HALF Down
+          } else if (gA.lvl.cur.map[y][x] === 9) { //Spike HALF Down
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(( this.tX )+gA.tS/4, this.tY); //Top left
             gA.ctx.m.lineTo(this.tX+gA.tS/2, this.tY+gA.tS/2); // Bottom Mid
@@ -90,7 +90,7 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 10) { //Spike HALF Down
+          } else if (gA.lvl.cur.map[y][x] === 10) { //Spike HALF Down
             gA.ctx.m.beginPath();
             gA.ctx.m.moveTo(( this.tX )+gA.tS/4, this.tY); //Top left
             gA.ctx.m.lineTo(this.tX+gA.tS/2, this.tY+gA.tS/2); // Bottom Mid
@@ -98,23 +98,23 @@ gA.map = (function() {
             gA.ctx.m.closePath();
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fill();
-          } else if (gA.level.map[y][x] === 11) {
+          } else if (gA.lvl.cur.map[y][x] === 11) {
             // gA.ctx.m.fillStyle = fg;
             // gA.ctx.m.fillRect(this.tX+gA.tS/4, this.tY, gA.tS/2, gA.tS/8);
-          } else if (gA.level.map[y][x] === 12) {
+          } else if (gA.lvl.cur.map[y][x] === 12) {
             gA.ctx.m.fillStyle = fg;
             gA.ctx.m.fillRect(this.tX, this.tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
             if(setup)
               aniTiles.push(new gA.entity.windGen(this.tX, this.tY, fgArr));
-          } else if (gA.level.map[y][x] === 13) {
+          } else if (gA.lvl.cur.map[y][x] === 13) {
             gA.ctx.m.fillStyle = bg;
             gA.ctx.m.fillRect(this.tX, this.tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
             if(setup)
               aniTiles.push(new gA.entity.windGen(this.tX, this.tY, bgArr));
-          } else if (gA.level.map[y][x] === 14) {
+          } else if (gA.lvl.cur.map[y][x] === 14) {
             if(setup)
               aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, bg, fg));
-          } else if (gA.level.map[y][x] === 15) {
+          } else if (gA.lvl.cur.map[y][x] === 15) {
             if(setup)
               aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, fg, bg));
           }

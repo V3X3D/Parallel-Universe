@@ -6,8 +6,6 @@ gA.overlay = (function() {
     this.delay = 50;
     this.y = -this.s;
     this.vy = -1;
-    // this.bgClr;
-    // this.fgClr;
     this.count = -1;
 
     this.update = function() {
@@ -28,8 +26,6 @@ gA.overlay = (function() {
     this.render = function() {
       this.bgRGB = [gA.level.bgClr.R, gA.level.bgClr.G, gA.level.bgClr.B];
       this.fgRGB = [gA.fgClr.R, gA.fgClr.G, gA.fgClr.B];
-      // this.bgRGB = gA.colorAjust(this.bgRGB, 50);
-      // this.fgRGB = gA.colorAjust(this.fgRGB, 50);
 
       this.bgClr = 'rgba('+ this.bgRGB[0] +','+this.bgRGB[1]+','+ this.bgRGB[2] +',1)';
       this.fgClr = 'rgba('+ this.fgRGB[0] +','+this.fgRGB[1]+','+ this.fgRGB[2] +',1)';

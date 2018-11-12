@@ -1,12 +1,14 @@
 gA.cursor = (function() {
   "use strict";
 
-  var state = function(options, shared, context) {
+  var state = function(opts, share, context) {
 
-    this.curMaxX = shared.x-gA.tS/1.5;
-    this.curMinX = shared.x-gA.tS;
+    this.share = share;
+
+    this.curMaxX = this.share.x-gA.tS/1.5;
+    this.curMinX = this.share.x-gA.tS;
     this.curX = this.curMinX;
-    this.curY = options.opt0.y;
+    this.curY = opts[0].y;
     this.curVX = -0.5;
 
     this.update = function() {
@@ -16,41 +18,33 @@ gA.cursor = (function() {
 
       if(gA.key.down) {
         gA.key.down = false;
-        shared.selected += 1;
-        if(shared.selected >= shared.size) shared.selected = 0;
-        this.curY = options['opt'+shared.selected+''].y; 
+        this.share.selected += 1;
+        if(this.share.selected >= opts.length) this.share.selected = 0;
       } else if(gA.key.up) {
         gA.key.up = false;
-        shared.selected -= 1;
-        if(shared.selected < 0) shared.selected = shared.size-1;
-        this.curY = options['opt'+shared.selected+''].y; 
+        this.share.selected -= 1;
+        if(this.share.selected < 0) this.share.selected = opts.length-1;
       }
+      this.curY = opts[this.share.selected].y;
 
-      if(gA.key.select) {
-        for(var key in options) {
-          if (options.hasOwnProperty(key)) {
-            if(options[key].y === this.curY) {
-              gA.key.select = false;
-              options[key].animation(context, key);
-            }
-          }
+      for(var k=0; k<opts.length; k+=1) {
+        if(opts[k].y === this.curY && gA.key.select) {
+          gA.key.select = false;
+          opts[k].animation(context, k);
         }
       }
     };
     this.render = function() {
-      if(typeof(gA.ctx.g.fillStyle = options['opt'+shared.selected+''].color) === 'function') {
-        gA.ctx.g.fillStyle = options['opt'+shared.selected+''].color();
-      } else {
-        gA.ctx.g.fillStyle = options['opt'+shared.selected+''].color;
-      }
-      // if(gA.state.titleScreen)
-      // else
+      if(typeof(gA.ctx.g.fillStyle = opts[this.share.selected].color) === 'function')
+        gA.ctx.g.fillStyle = opts[this.share.selected].color(context);
+      else
+        gA.ctx.g.fillStyle = opts[this.share.selected].color;
 
       gA.ctx.g.fillText('>', this.curX, this.curY);
     };
   };
 
-  return { 
+  return {
     state: state
   };
 
