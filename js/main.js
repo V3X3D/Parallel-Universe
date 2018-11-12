@@ -2,21 +2,27 @@
   "use strict";
 
   window.gA = {};
-  gA.scale = 1;
-  gA.tS = 32/gA.scale; //Canvas Height
+  gA.tS = 32; //Canvas Height
   gA.cW = 20*gA.tS; //Canvas Width
   gA.cH = 14*gA.tS; //Canvas Height
-  gA.load = [];
-  gA.levels = {};
-  gA.lvlNum = 1;
-  gA.currLevel = gA.levels[1];
-  gA.nextLevel;
+  gA.load = []; //Bg sequences loaded
+  gA.levelsList; //List of levels
+  gA.lvlNum; //Current level number
+  gA.level; //Current level
+  gA.bgClr; //Background color
+  gA.fgClr; //Foreground color
+
+  gA.state = {
+    titleScreen: false,
+    transition: true
+  };
 
   window.onload = function() {
 
     var Canvas = new gA.canvas.init();
     var Blood = new gA.blood.init();
     var FPS = new gA.fps.init();
+    var Transition = new gA.transitions.fade();
 
     gA.map.init.render();
     function gameLoop() {
@@ -26,7 +32,9 @@
       gA.player.state.update();
       gA.map.animated.update();
       Blood.update();
-      FPS.update();
+      // console.time('Function #1');
+      if(gA.state.transition === true) Transition.update();
+      // FPS.update();
 
       //Game Drawing
       Canvas.render();
@@ -34,10 +42,11 @@
       gA.player.state.render();
       gA.map.animated.render();
       Blood.render();
-      FPS.render();
+      if(gA.state.transition === true) Transition.render();
+      // FPS.render();
 
       window.requestAnimationFrame(gameLoop);
-      // setTimeout(gameLoop, 150);
+      // setTimeout(gameLoop, 50);
     }
     gameLoop();
   };

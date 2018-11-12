@@ -114,12 +114,12 @@ gA.viewCollide = (function() {
               triBottomR = [tX+gA.tS, tY+gA.tS];
               triTopM = [tX+gA.tS/2, tY];
 
-              triLeft = new gA.segment.make2(triBottomL[0], triBottomL[1], gA.tS/2, -gA.tS);
-              triRight = new gA.segment.make2(triBottomR[0], triBottomR[1], -gA.tS/2, -gA.tS);
+              triLeft = new gA.segment.make(triBottomL[0], triBottomL[1], gA.tS/2, -gA.tS);
+              triRight = new gA.segment.make(triBottomR[0], triBottomR[1], -gA.tS/2, -gA.tS);
 
-              pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-              pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-              pBottom = new gA.segment.make2(obj.x, obj.y+obj.h, obj.w, 0);
+              pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+              pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+              pBottom = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
               triangleLines = playerLines = [];
 
@@ -131,12 +131,12 @@ gA.viewCollide = (function() {
               triTopR = [tX+gA.tS, tY];
               triBottomM = [tX+gA.tS/2, tY+gA.tS];
 
-              triLeft = new gA.segment.make2(triTopL[0], triTopL[1], gA.tS/2, gA.tS);
-              triRight = new gA.segment.make2(triTopR[0], triTopR[1], -gA.tS/2, gA.tS);
+              triLeft = new gA.segment.make(triTopL[0], triTopL[1], gA.tS/2, gA.tS);
+              triRight = new gA.segment.make(triTopR[0], triTopR[1], -gA.tS/2, gA.tS);
 
-              pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-              pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-              pTop = new gA.segment.make2(obj.x, obj.y, obj.w, 0);
+              pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+              pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+              pTop = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
               triangleLines = playerLines = [];
 
@@ -151,12 +151,12 @@ gA.viewCollide = (function() {
               triBottomR = [( tX+gA.tS )-gA.tS/4, tY+gA.tS];
               triTopM = [tX+gA.tS/2, tY+gA.tS/2];
 
-              triLeft = new gA.segment.make2(triBottomL[0], triBottomL[1], gA.tS/4, -gA.tS/2);
-              triRight = new gA.segment.make2(triBottomR[0], triBottomR[1], -gA.tS/4, -gA.tS/2);
+              triLeft = new gA.segment.make(triBottomL[0], triBottomL[1], gA.tS/4, -gA.tS/2);
+              triRight = new gA.segment.make(triBottomR[0], triBottomR[1], -gA.tS/4, -gA.tS/2);
 
-              pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-              pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-              pBottom = new gA.segment.make2(obj.x, obj.y+obj.h, obj.w, 0);
+              pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+              pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+              pBottom = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
               triangleLines = playerLines = [];
 
@@ -168,12 +168,12 @@ gA.viewCollide = (function() {
               triTopR = [( tX+gA.tS )-gA.tS/4, tY];
               triBottomM = [tX+gA.tS/2, tY+gA.tS/2];
 
-              triLeft = new gA.segment.make2(triTopL[0], triTopL[1], gA.tS/4, gA.tS/2);
-              triRight = new gA.segment.make2(triTopR[0], triTopR[1], -gA.tS/4, gA.tS/2);
+              triLeft = new gA.segment.make(triTopL[0], triTopL[1], gA.tS/4, gA.tS/2);
+              triRight = new gA.segment.make(triTopR[0], triTopR[1], -gA.tS/4, gA.tS/2);
 
-              pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-              pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-              pTop = new gA.segment.make2(obj.x, obj.y, obj.w, 0);
+              pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+              pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+              pTop = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
               triangleLines = playerLines = [];
 

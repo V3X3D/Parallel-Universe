@@ -1,40 +1,33 @@
 gA.entity = (function() {
   "use strict";
 
+  /*NEXT LEVEL WARP*/
   var levelWarp = function(tX, tY, bColor, fColor) {
     this.rotation = 45;
     this.rotation2 = 0;
     this.rate = 2;
     this.s = gA.tS/2;
 
-    this.update = function() {
-      if(this.rotation <= 360) this.rotation += this.rate; 
-      else this.rotation = 0;
+    this.delay = 0;
 
-      if(this.s > 0 && gA.transition === true) {
-        this.rate = 4;
-        this.s += 24; 
-        if(tX < gA.cW/2) tX += 10; 
-        else if(tX > gA.cW/2) tX -= 10; 
-        if(tY < gA.cH/2) tY += 8;
-        else if(tY > gA.cH/2) tY -= 8;
-      }
-      if (this.s > 1024) {
-        gA.transition = false;
-        gA.nextLevel();
-      }
+    this.x = tX+gA.tS/2;
+    this.y = tY+gA.tS/2;
+
+    this.logic = function() {
+      if(this.rotation <= 360) this.rotation += this.rate;
+      else this.rotation = 0;
 
       if(this.rotation2 <= 360) this.rotation2 += this.rate;
       else this.rotation2 = 0;
     };
 
     this.draw = function() {
-      gA.ctx.g.setTransform(1, 0, 0, 1, tX+gA.tS/2, tY+gA.tS/2);
+      gA.ctx.g.setTransform(1, 0, 0, 1, this.x, this.y);
       gA.ctx.g.rotate(this.rotation*Math.PI/180);
       gA.ctx.g.fillStyle = bColor;
       gA.ctx.g.fillRect(-gA.tS/4, -gA.tS/4, gA.tS/2, gA.tS/2);
 
-      gA.ctx.g.setTransform(1, 0, 0, 1, tX+gA.tS/2, tY+gA.tS/2);
+      gA.ctx.g.setTransform(1, 0, 0, 1, this.x, this.y);
       gA.ctx.g.rotate(this.rotation2*Math.PI/180);
       gA.ctx.g.fillStyle = fColor;
       gA.ctx.g.fillRect(0-this.s/2, 0-this.s/2, this.s, this.s);
@@ -43,18 +36,15 @@ gA.entity = (function() {
     };
   };
 
+  /*WIND AND WIND GENERATOR*/
   var windGenerator = function(tX, tY, color) {
     var i;
 
     this.array = [];
     this.countingDown = false;
-    this.color = '#fff';
+    this.color = 'rgb('+color.R+','+color.G+','+color.B+')';
 
-    if(color === 'white') {
-      this.color = '#000';
-    }
-
-    this.update = function() {
+    this.logic = function() {
       if(this.countingDown === false) {
         this.countingDown = true;
         setTimeout(function() {
@@ -64,7 +54,7 @@ gA.entity = (function() {
       }
 
       for(i = 0; i < this.array.length; i+=1) {
-        this.array[i].update();
+        this.array[i].logic();
         if(this.array[i].A <= 0) this.array.splice(i, 1);
       }
     };
@@ -77,8 +67,17 @@ gA.entity = (function() {
 
   var windBlowing = function(tX, tY, color) {
     this.rotation = Math.floor(Math.random()*360);
+    if(color === gA.bgClr) {
+      this.R = gA.fgClr.R;
+      this.G = gA.fgClr.G;
+      this.B = gA.fgClr.B;
+    } else {
+      this.R = gA.bgClr.R;
+      this.G = gA.bgClr.G;
+      this.B = gA.bgClr.B;
+    }
     this.A = 1;
-    this.color = 'rgba(255,255,255,'+this.A+')';
+    this.color = 'rgba('+this.R+','+this.G+','+this.B+','+this.A+')';
     this.plusOrMinus = Math.random() < 0.5 ? -1 : 1;
     this.xShift = Math.floor(Math.random()*9) * this.plusOrMinus;
     this.spd = Math.floor(Math.random()*3)+6;
@@ -86,16 +85,12 @@ gA.entity = (function() {
     this.x = tX+this.xShift;
     this.y = tY;
 
-    this.update = function() {
+    this.logic = function() {
       if(this.rotation <= 360) this.rotation += 2;
       else this.rotation = 0;
       this.y -= this.spd;
       this.A -= 0.04;
-      if(color === 'white') {
-        this.color = 'rgba(255,255,255,'+this.A+')';
-      } else {
-        this.color = 'rgba(0,0,0,'+this.A+')';
-      }
+      this.color = 'rgba('+this.R+','+this.G+','+this.B+','+this.A+')';
     };
 
     this.draw = function() {

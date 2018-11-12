@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  function sequence1(color, spd, dir) { //Bottom to Top
+  function sequence1(spd, dir) { //Bottom to Top
     /*Info*/
     //Dir can be 'T' or 'B'.
 
@@ -9,7 +9,6 @@
     this.y = gA.cH;
     this.w = gA.cW;
     this.h = gA.cH;
-    this.color = color;
 
     this.logic = function() {
       if(dir === 'D' || dir === undefined) {
@@ -25,7 +24,7 @@
     };
   }
 
-  function sequence2(color, spd, side, dir, offset) {
+  function sequence2(spd, side, dir, offset) {
     /*Info*/
     //Side can be 'T' or 'B'.
     //Dir can be 'L' or 'R'.
@@ -35,7 +34,6 @@
     this.y = gA.cH/2;
     this.w = gA.cW;
     this.h = gA.cH/2;
-    this.color = color;
 
     if(side === 'T' || side === undefined) { this.y = 0; }
     else { this.y = gA.cH/2; }
@@ -55,7 +53,7 @@
       gA.ctx.b.fillRect(this.x, this.y, this.w, this.h);
     };
   }
-  function sequence3(color, spd, side, dir, offset) { //Half top to bottom
+  function sequence3(spd, side, dir, offset) { //Half top to bottom
     /*Info*/
     //Side can be 'L' or 'R'.
     //Dir can be 'U' or 'D'.
@@ -65,7 +63,6 @@
     this.y = -gA.cH;
     this.w = gA.cW/2;
     this.h = gA.cH;
-    this.color = color;
 
     if(side === 'L' || side === undefined) { this.x = 0; }
     else { this.x = gA.cW/2; }

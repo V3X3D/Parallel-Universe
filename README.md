@@ -1,18 +1,7 @@
-Updates
---------------
-Made level creation more flexable
-Added silly transition for chaning levels (need to make it better)
-Made blood perfect.
+Work on
+
+Things like camera -- for larger levels --, screen scaling, and maybe
+some audio synthisizer.
 
 
-Issues
--------------
-Find way to make player bob on wind (like blood)
-Player is not locked in place during transition
-Wind should stop during transition
-
-
-
-Todo
------------
-clean up code (like for real this time)
+Also might make a level creator

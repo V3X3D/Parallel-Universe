@@ -1,10 +1,12 @@
-gA.player = (function() {
-  "use strict";
+gA.player = (function() { "use strict";
+
+  var particles = [];
+  var nearGround;
 
   function playerInit() {
     this.alive = true;
-    this.x = gA.currLevel.player.x;
-    this.y = gA.currLevel.player.y;
+    this.x = gA.level.player.x;
+    this.y = gA.level.player.y;
     this.w = gA.tS;
     this.h = gA.tS;
     this.spd = 4;
@@ -12,21 +14,34 @@ gA.player = (function() {
     this.wind = false;
     this.gravConst = 1;
     this.grav = this.gravConst;
-    this.gravMax = 12;
+    this.gravMax = 14;
     this.vyConst = -12;
     this.vy = this.vyConst;
-    this.R = gA.currLevel.player.color[0];
-    this.G = gA.currLevel.player.color[1];
-    this.B = gA.currLevel.player.color[2];
-    this.A = gA.currLevel.player.color[3];
+
+    if(!gA.level.player.color) {
+      this.R = gA.fgClr.R;
+      this.G = gA.fgClr.G;
+      this.B = gA.fgClr.B;
+      this.A = 1;
+    } else {
+      this.R = gA.level.player.color[0];
+      this.G = gA.level.player.color[1];
+      this.B = gA.level.player.color[2];
+      this.A = 1;
+    }
+
     this.color = 'rgba('+this.R+','+this.G+','+this.B+','+this.A+')';
     this.action;
+
+    this.respawn = false;
 
     this.gravCollide;
     this.leftCollide;
     this.rightCollide;
     this.jumpCollide;
     this.windCollide;
+
+    this.spawnAni;
 
     var grid;
 
@@ -35,7 +50,7 @@ gA.player = (function() {
       //Make collision grid + get player in map grid position
       grid = new gA.collision.map(this.x, this.y, this.w, this.h).update();
 
-      if(this.alive) {
+      if(this.alive && gA.state.transition === false) {
         //Jump and Gravity
         if (this.wind === true) {
           windActive(this, grid);
@@ -71,6 +86,12 @@ gA.player = (function() {
         this.A -= 0.2; // Fade out if dead
         gA.ctx.g.fillRect(this.x, this.y, this.w, this.h);
       }
+
+      if(this.respawn === true) {
+        this.spawnAni.update();
+        this.spawnAni.draw();
+      }
+
     };
   }
 
@@ -85,10 +106,16 @@ gA.player = (function() {
     }
 
     if(obj.windCollide === 'wind') { /*WIND*/
+      nearGround = gA.collision.check(obj, grid.grid, grid.cTX, grid.cTY, 0, obj.grav+obj.h).tY;
+
       obj.grav = -obj.grav;
-      if (-obj.grav > -obj.gravMax-6) obj.grav += 1;
+      if(-obj.grav > -obj.gravMax-2) obj.grav += 1;
       if(obj.grav !== 0) obj.grav = -obj.grav; // Prevent -0s
-      obj.y += obj.grav;
+
+      if(obj.grav <= 1 && obj.grav >= -1 && nearGround === undefined && obj.windCollide === 'wind') obj.y += obj.grav+2;
+      else if(obj.grav <= 3 && obj.grav > 1 && nearGround === undefined && obj.windCollide === 'wind') obj.y += obj.grav+2;
+      else obj.y += obj.grav;
+
       obj.jump = false;
     } else {
       if(obj.grav < 0) { // Rising Collision
@@ -96,7 +123,7 @@ gA.player = (function() {
           obj.y = ( obj.windCollide.tY + gA.tS );
           obj.grav = 0;
         }
-        if(obj.windCollide === 'spike') death(obj); 
+        if(obj.windCollide === 'spike') death(obj);
       } else if (obj.grav >= 0) { // Falling Collision
         if(obj.windCollide.tY !== undefined) {
           obj.y = obj.windCollide.tY - obj.h;
@@ -153,7 +180,7 @@ gA.player = (function() {
       if(obj.gravCollide === 'spike') death(obj);
     } else { /*FALLING*/
       if (obj.grav < obj.gravMax) obj.grav += 1;
-      obj.y += obj.grav; 
+      obj.y += obj.grav;
     }
   }
 
@@ -173,7 +200,7 @@ gA.player = (function() {
 
   function rightActive(obj, grid) {
     obj.action = 'right';
-    obj.rightCollide = gA.collision.check2(obj, grid.grid, grid.cTX, grid.cTY, obj.spd, 0);
+    obj.rightCollide = gA.collision.check(obj, grid.grid, grid.cTX, grid.cTY, obj.spd, 0);
 
     if(obj.rightCollide === 'wind') { /*WIND*/
       obj.jump = false;
@@ -195,7 +222,8 @@ gA.player = (function() {
       obj.jumpCollide = '';
 
       for(var i = 0; i < Math.floor(Math.random() * 16)+18; i+=1) {
-        new gA.blood.make(23/gA.scale);
+      // for(var i = 0; i < Math.floor(Math.random() * 3); i+=1) {
+        new gA.blood.make(23);
       }
 
       obj.alive = false;

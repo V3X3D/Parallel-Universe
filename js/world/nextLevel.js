@@ -1,28 +1,43 @@
-(function() {
+gA.nextLevel = (function() {
+  "use strict";
 
-  gA.currLevel = gA.levels[gA.lvlNum];
-  gA.currLevel.background();
+  gA.lvlNum = 1;
+  gA.level = gA.levelsList[gA.lvlNum];
+  gA.level.background();
 
-  gA.nextLevelAni = function() {
-    gA.transition = true;
-  };
-  gA.nextLevel = function(count) {
-    gA.transition = false;
+  gA.bgClr = gA.level.bgClr; //Background color
+  gA.fgClr = gA.level.fgClr(); //Foreground color
+
+  var goNextLevel = function(count) {
     //Load new level
     gA.lvlNum += count || 1;
-    gA.currLevel = gA.levels[gA.lvlNum];
+    gA.level = gA.levelsList[gA.lvlNum];
 
-    // //Load new level background
+    //Load new level background
     gA.load = [];
-    gA.currLevel.background();
+    gA.level.background();
 
-    // //Reset player for new level
-    gA.reset.level.update();
+    //Set new bg/fg color
+    gA.bgClr = gA.level.bgClr;
+    gA.fgClr = gA.level.fgClr();
 
-    // //Clear previous map
+    //Reset player for new level
+    gA.reset.level.update(true);
+
+    //Clear previous map
     gA.map.aniClear();
     gA.ctx.m.clearRect(0, 0, gA.cW, gA.cH);
+
+    //Transition
+    gA.state.transition = true;
+    gA.transitions.fadeToggle();
+
+    //Load new map
     gA.map.init.render();
+  };
+
+  return {
+    go: goNextLevel
   };
 
 })();

@@ -9,14 +9,13 @@ gA.bg = (function() {
     this.y = sequence.y;
     this.w = sequence.w;
     this.h = sequence.h;
-    this.color = sequence.color;
     this.sequence = sequence;
 
-    this.update = function() {
+    this.logic = function() {
       this.sequence.logic();
     };
-    this.render = function() {
-      gA.ctx.b.fillStyle = this.color;
+    this.draw = function() {
+      gA.ctx.b.fillStyle = 'rgb('+gA.fgClr.R+','+gA.fgClr.G+','+gA.fgClr.B+')';
       this.sequence.draw();
     };
   };
@@ -29,12 +28,11 @@ gA.bg = (function() {
       array = [];
       for(i = 0; i < gA.load.length; i+=1) {
         array.push(new pane(gA.load[i]));
-        array[i].update();
+        array[i].logic();
       }
-      // for(i = 0; i < array.length; i += 1) array[i].update();
     };
     this.render = function() {
-      for(i = 0; i < array.length; i += 1) array[i].render();
+      for(i = 0; i < array.length; i += 1) array[i].draw();
     };
   };
 

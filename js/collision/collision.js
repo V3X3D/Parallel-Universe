@@ -22,12 +22,12 @@ gA.collision = (function() {
     triBottomR = [tX+gA.tS, tY+gA.tS];
     triTopM = [tX+gA.tS/2, tY];
 
-    triLeft = new gA.segment.make2(triBottomL[0], triBottomL[1], gA.tS/2, -gA.tS);
-    triRight = new gA.segment.make2(triBottomR[0], triBottomR[1], -gA.tS/2, -gA.tS);
+    triLeft = new gA.segment.make(triBottomL[0], triBottomL[1], gA.tS/2, -gA.tS);
+    triRight = new gA.segment.make(triBottomR[0], triBottomR[1], -gA.tS/2, -gA.tS);
 
-    pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-    pBottom = new gA.segment.make2(obj.x, obj.y+obj.h, obj.w, 0);
+    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pBottom = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
     if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pBottom)) return true;
     return false;
@@ -37,12 +37,12 @@ gA.collision = (function() {
     triTopR = [tX+gA.tS, tY];
     triBottomM = [tX+gA.tS/2, tY+gA.tS];
 
-    triLeft = new gA.segment.make2(triTopL[0], triTopL[1], gA.tS/2, gA.tS);
-    triRight = new gA.segment.make2(triTopR[0], triTopR[1], -gA.tS/2, gA.tS);
+    triLeft = new gA.segment.make(triTopL[0], triTopL[1], gA.tS/2, gA.tS);
+    triRight = new gA.segment.make(triTopR[0], triTopR[1], -gA.tS/2, gA.tS);
 
-    pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-    pTop = new gA.segment.make2(obj.x, obj.y, obj.w, 0);
+    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pTop = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
     if(triRight.intersect(pLeft) || triLeft.intersect(pRight) 
       || triLeft.intersect(pTop) || triRight.intersect(pTop)) {
@@ -55,12 +55,12 @@ gA.collision = (function() {
     triBottomR = [( tX+gA.tS )-gA.tS/4, tY+gA.tS];
     triTopM = [tX+gA.tS/2, tY+gA.tS/2];
 
-    triLeft = new gA.segment.make2(triBottomL[0], triBottomL[1], gA.tS/4, -gA.tS/2);
-    triRight = new gA.segment.make2(triBottomR[0], triBottomR[1], -gA.tS/4, -gA.tS/2);
+    triLeft = new gA.segment.make(triBottomL[0], triBottomL[1], gA.tS/4, -gA.tS/2);
+    triRight = new gA.segment.make(triBottomR[0], triBottomR[1], -gA.tS/4, -gA.tS/2);
 
-    pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-    pBottom = new gA.segment.make2(obj.x, obj.y+obj.h, obj.w, 0);
+    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pBottom = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
     if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pBottom)) return true;
     return false;
@@ -70,12 +70,12 @@ gA.collision = (function() {
     triTopR = [( tX+gA.tS )-gA.tS/4, tY];
     triBottomM = [tX+gA.tS/2, tY+gA.tS/2];
 
-    triLeft = new gA.segment.make2(triTopL[0], triTopL[1], gA.tS/4, gA.tS/2);
-    triRight = new gA.segment.make2(triTopR[0], triTopR[1], -gA.tS/4, gA.tS/2);
+    triLeft = new gA.segment.make(triTopL[0], triTopL[1], gA.tS/4, gA.tS/2);
+    triRight = new gA.segment.make(triTopR[0], triTopR[1], -gA.tS/4, gA.tS/2);
 
-    pLeft = new gA.segment.make2(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make2(obj.x+obj.w, obj.y, 0, obj.h);
-    pTop = new gA.segment.make2(obj.x, obj.y, obj.w, 0);
+    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pTop = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
     if(triRight.intersect(pLeft) || triLeft.intersect(pRight) 
       || triLeft.intersect(pTop) || triRight.intersect(pTop)) {
@@ -119,6 +119,15 @@ gA.collision = (function() {
           /*WIND*/
           if (map[y][x] === 11 || map[y][x] === 12 || map[y][x] === 13) {
 
+            /* 
+              Fixes bug with entering walls to your rights side while colliding 
+              with them inside wind it causes you to warp to the top of the 
+              wall block if not patched.
+            */
+            if (map[y][x+1] === 1 || map[y][x+1] === 2) {
+              if (obj.action === 'right' && xPos+obj.w > tX+32) return true;
+            }
+
             //Ground to right - left works
             if (map[y][x+1] === 1 || map[y][x+1] === 2)
               if(obj.action === 'gravity' && xPos+obj.w > tX+gA.tS) return { tX: tX, tY: tY };
@@ -151,9 +160,10 @@ gA.collision = (function() {
 
           if (map[y][x] === 14 || map[y][x] === 15) {
             if(obj.type !== 'blood') {
-              if (xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4 
+              if (xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4
                 && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
-                gA.nextLevelAni();
+                gA.state.transition = true;
+                gA.transitions.fadeToggle();
               }
             }
           }
@@ -163,49 +173,6 @@ gA.collision = (function() {
     }
     return false;
   }
-
-  function smartMoveRight(obj, map, cTX, cTY, xDif, yDif) {
-    for(var y=0; y < map.length; y+=1) {
-      for(var x=map[y].length; x > 0; x-=1) {
-
-        tX = (x * gA.tS) + (cTX-1)*gA.tS;
-        tY = (y * gA.tS) + (cTY-1)*gA.tS;
-
-        xPos = obj.x+xDif;
-        yPos = obj.y+yDif;
-
-        //Block checks
-        if (rectRect(xPos, yPos, tX, tY, obj.w, obj.h, gA.tS, gA.tS)) {
-          if (map[y][x] === 1 || map[y][x] === 2) {
-
-            if (obj.action === 'gravity' && yPos+obj.h > tY) return { tY: tY };
-            if (obj.action === 'wind' || obj.action === 'jump' && yPos < tY+gA.tS) return { tY: tY };
-            return true;
-          }
-
-          //Spike full checks
-          if (map[y][x] === 3 || map[y][x] === 4) { //Spike facing up
-            if(fullSpikeUpCollision(tX, tY, obj)) return 'spike';
-          } else if (map[y][x] === 5 || map[y][x] === 6) { //Spike facing down
-            if(fullSpikeDownCollision(tX, tY, obj)) return 'spike';
-          }
-
-          //Spike half checks
-          if (map[y][x] === 7 || map[y][x] === 8) { //Half spike facing up
-            if(halfSpikeUpCollision(tX, tY, obj)) return 'spike';
-          } else if (map[y][x] === 9 || map[y][x] === 10) { //Half spike facing down
-            if(halfSpikeDownCollision(tX, tY, obj)) return 'spike';
-          }
-
-          if (map[y][x] === 11)
-            if (yPos < tY+gA.tS/8 && xPos+obj.w > tX+gA.tS/4 && xPos < ( tX+gA.tS )-gA.tS/4) return 'wind';
-
-        }
-      }
-    }
-    return false;
-  }
-
 
   function collisionMap(x, y, w, h, gridSize) {
     this.cTX;
@@ -224,20 +191,20 @@ gA.collision = (function() {
 
       this.grid = grid;
 
-      if (gA.currLevel.map[this.cTY-1] !== undefined) {
-        this.grid[0][0] = (gA.currLevel.map[this.cTY-1][this.cTX-1]); // Top Left Corner
-        this.grid[0][1] = (gA.currLevel.map[this.cTY-1][this.cTX]); // Above
-        this.grid[0][2] = (gA.currLevel.map[this.cTY-1][this.cTX+1]); // Top Right Corner
+      if (gA.level.map[this.cTY-1] !== undefined) {
+        this.grid[0][0] = (gA.level.map[this.cTY-1][this.cTX-1]); // Top Left Corner
+        this.grid[0][1] = (gA.level.map[this.cTY-1][this.cTX]); // Above
+        this.grid[0][2] = (gA.level.map[this.cTY-1][this.cTX+1]); // Top Right Corner
       }
-      if (gA.currLevel.map[this.cTY] !== undefined) {
-        this.grid[1][0] = (gA.currLevel.map[this.cTY][this.cTX-1]); // Left
-        this.grid[1][1] = (gA.currLevel.map[this.cTY][this.cTX]); // Player // Not needed if just looking for spike edge collision
-        this.grid[1][2] = (gA.currLevel.map[this.cTY][this.cTX+1]); // Right
+      if (gA.level.map[this.cTY] !== undefined) {
+        this.grid[1][0] = (gA.level.map[this.cTY][this.cTX-1]); // Left
+        this.grid[1][1] = (gA.level.map[this.cTY][this.cTX]); // Player // Not needed if just looking for spike edge collision
+        this.grid[1][2] = (gA.level.map[this.cTY][this.cTX+1]); // Right
       }
-      if (gA.currLevel.map[this.cTY+1] !== undefined) {
-        this.grid[2][0] = (gA.currLevel.map[this.cTY+1][this.cTX-1]); // Bottom Left Corner
-        this.grid[2][1] = (gA.currLevel.map[this.cTY+1][this.cTX]); // Below
-        this.grid[2][2] = (gA.currLevel.map[this.cTY+1][this.cTX+1]); // Bottom Right Corner
+      if (gA.level.map[this.cTY+1] !== undefined) {
+        this.grid[2][0] = (gA.level.map[this.cTY+1][this.cTX-1]); // Bottom Left Corner
+        this.grid[2][1] = (gA.level.map[this.cTY+1][this.cTX]); // Below
+        this.grid[2][2] = (gA.level.map[this.cTY+1][this.cTX+1]); // Bottom Right Corner
       }
 
       return {
@@ -250,8 +217,7 @@ gA.collision = (function() {
 
   return {
     map: collisionMap, // Makes map for smarMove and smarMapInit
-    check: smartMove, // Loops through collisionMap
-    check2: smartMoveRight // Loops through collisionMap in reverse order
+    check: smartMove // Loops through collisionMap
   };
 
 })();

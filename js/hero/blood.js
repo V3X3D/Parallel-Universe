@@ -3,6 +3,10 @@ gA.blood = (function() {
 
   var array = [];
 
+  var inc = 50;
+  var flip = 127.5;
+  var i;
+
   var make = function(range) {
     this.type = 'blood';
     this.x = gA.player.state.x+Math.floor(Math.random() * range)+1;
@@ -10,15 +14,39 @@ gA.blood = (function() {
     this.w = gA.tS/4;
     this.h = gA.tS/4;
     this.plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    this.vx = (Math.random()*4/gA.scale) * this.plusOrMinus;
-    this.vy = (Math.random()*8/gA.scale+8/gA.scale)*-1;
+    this.vx = (Math.random()*4) * this.plusOrMinus;
+    this.vy = (Math.random()*8+8)*-1;
     this.spd = 2;
-    this.A = 1;
-    this.R = Math.floor(Math.random()*110)+90;
-    this.color = 'rgba('+ this.R +',0,0,'+this.A+')';
-    this.gravConst = 3/gA.scale;
+
+    this.invert = Math.random() < 0.5 ? -1 : 1;
+
+    if(!gA.level.bloodClr) {
+      this.RGBorig = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
+      this.RGB = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
+      this.RGB = colorAjust(this.RGB, inc);
+
+      if(this.invert === 1) {
+        if(gA.invertClr(this.RGBorig[0]) === gA.fgClr.R && gA.invertClr(this.RGBorig[1]) === gA.fgClr.G && gA.invertClr(this.RGBorig[2]) === gA.fgClr.B) {
+          this.RGB = [gA.invertClr(this.RGB[0]), gA.invertClr(this.RGB[1]), gA.invertClr(this.RGB[2])];
+        } else {
+          this.RGB = [gA.fgClr.R, gA.fgClr.G, gA.fgClr.B];
+          this.RGB = colorAjust(this.RGB, inc);
+        }
+      }
+    } else {
+      this.RGB = [gA.level.bloodClr.R, gA.level.bloodClr.G, gA.level.bloodClr.B];
+      if(!gA.level.bloodShft)
+        this.RGB = colorAjust(this.RGB, 0);
+      else
+        this.RGB = colorAjust(this.RGB, Math.floor(Math.random() * (gA.level.bloodShft.max - gA.level.bloodShft.min + 1)) + gA.level.bloodShft.min);
+    }
+
+
+    this.color = 'rgba('+ this.RGB[0] +','+this.RGB[1]+','+ this.RGB[2] +',1)';
+
+    this.gravConst = 3;
     this.grav = this.gravConst;
-    this.gravMax = 10/gA.scale;
+    this.gravMax = 10;
     this.onG = false;
     this.gravCollide = false;
     this.windCollide = false;
@@ -45,7 +73,6 @@ gA.blood = (function() {
 
       this.y += this.vy;
       this.x += this.vx;
-
     };
     this.render = function() {
       // var collisionView = new gA.viewCollide.viewMap(grid.grid, grid.cTX, grid.cTY);
@@ -99,7 +126,7 @@ gA.blood = (function() {
       else obj.vx = 0;
     } else {
       if (obj.grav < obj.gravMax) obj.grav += 0.5;
-      obj.y += obj.grav; 
+      obj.y += obj.grav;
     }
   }
 
@@ -111,14 +138,29 @@ gA.blood = (function() {
     if(obj.jumpCollide === 'wind') {
       obj.wind = true;
     } else if(obj.jumpCollide) {
-      obj.vy -= 0.2/gA.scale;
+      obj.vy -= 0.2;
     }
 
     if(obj.vy >= 0) {
       obj.jump = false;
     } else {
-      obj.vy += 1/gA.scale;
+      obj.vy += 1;
     }
+  }
+
+  function colorAjust(colors, flux) {
+    for(i = 0; i < colors.length; i+=1) {
+      if(colors[i] !== undefined) {
+        if(colors[i] < flip) colors[i] += flux;
+        else if(colors[i] > flip) colors[i] -= flux;
+      }
+
+      if(colors[i] === undefined) colors[i] = 0;
+
+      if(colors[i] < 0) colors[i] = 0;
+      else if(colors[i] > 255) colors[i] = 255;
+    }
+    return colors;
   }
 
   var init = function() {

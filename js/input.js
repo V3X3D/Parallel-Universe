@@ -34,6 +34,8 @@ gA.input = (function() {
         case 65:
         case 68:
         case 87:
+        case 27:
+        case 116:
           break;
 
         default:
