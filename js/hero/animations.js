@@ -127,6 +127,6 @@ gA.animations = (function() {
     };
   }
 
-  return { focus, respawn };
+  return { focus: focus, respawn: respawn };
 })();
 

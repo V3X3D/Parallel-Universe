@@ -13,7 +13,7 @@
   gA.bgClr; //Background color
   gA.fgClr; //Foreground color
   gA.totalDeaths = 0;
-  gA.masterVolume = 0.55;
+  gA.masterVolume = 0.75;
 
   //Options
   gA.newWarn = false;
@@ -48,7 +48,6 @@
       var rect = gA.ctx.gCanv.getBoundingClientRect();
       gA.mX = e.clientX - rect.left - gA.cW/2;
       gA.mY = e.clientY - rect.top - gA.cH/2;
-      console.log('dfaklsdjfalkj');
     }
     if(!gA.started) {
       gA.ctx.gCanv.addEventListener('click', starter, false);
@@ -60,7 +59,6 @@
 
     var Canvas = new gA.canvas.init(),
       Blood = new gA.blood.init(),
-      FPS = new gA.fps.init(),
       LevelText = new gA.lvl.text.init();
 
     gA.map.init.render(true);
@@ -121,11 +119,7 @@
         gA.change.state.render();
       }
 
-      // FPS.update();
-      // FPS.render();
-
       window.requestAnimationFrame(gameLoop);
-      // setTimeout(gameLoop, 30);
     }
     gameLoop();
   };

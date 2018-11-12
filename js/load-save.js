@@ -16,14 +16,14 @@ if(storageAvailable('localStorage')) {
     localStorage.setItem('clr', JSON.stringify(gA.clr));
     localStorage.setItem('clr2', JSON.stringify(gA.clr2));
     localStorage.setItem('customClr', JSON.stringify(gA.customClr));
-    localStorage.setItem('lock20', JSON.stringify(gA.contentLock20));
+    localStorage.setItem('lock15', JSON.stringify(gA.contentLock15));
     localStorage.setItem('lock30', JSON.stringify(gA.contentLock30));
     localStorage.setItem('newWarning', JSON.stringify(gA.newWarn));
     localStorage.setItem('volume', JSON.stringify(gA.masterVolume));
   };
   gA.loadSettings = function() {
-    if(localStorage.getItem('lock20') !== null)
-      gA.contentLock20 = JSON.parse(localStorage.getItem('lock20'));
+    if(localStorage.getItem('lock15') !== null)
+      gA.contentLock15 = JSON.parse(localStorage.getItem('lock15'));
     if(localStorage.getItem('lock30') !== null)
       gA.contentLock30 = JSON.parse(localStorage.getItem('lock30'));
     if(localStorage.getItem('newWarning') !== null)

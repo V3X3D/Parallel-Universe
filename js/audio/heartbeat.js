@@ -2,7 +2,7 @@ gA.heart = (function() {
   "use strict";
 
   var heartRate = 1;
-  var heartBeat = new Audio('sound/heartbeat.mp3');
+  var heartBeat = new Audio('sound/heartbeat-pitch30.mp3');
   var beating = false;
 
   heartBeat.playbackRate = heartRate;
@@ -31,7 +31,6 @@ gA.heart = (function() {
     state: heartState
   };
 })();
-
 
 // More loop support
 // https://stackoverflow.com/questions/3273552/html5-audio-looping

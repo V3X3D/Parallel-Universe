@@ -24,14 +24,19 @@ gA.input = (function() {
     key = e.keyCode;
 
     if (key === 37 || key === 65) {
+      e.preventDefault();
       gA.key.left = true;
     } else if(key === 38 || key === 87) {
+      e.preventDefault();
       gA.key.up = true;
     } else if(key === 39 || key === 68) {
+      e.preventDefault();
       gA.key.right = true;
     } else if(key === 83 || key === 40) {
+      e.preventDefault();
       gA.key.down = true;
     } else if(key === 32 || key === 13) {
+      e.preventDefault();
       if(gA.state.pauseMenu || gA.state.titleScreen) gA.key.select = true;
       else if(key !== 13) gA.key.up = true;
     } else if(key === 82) {

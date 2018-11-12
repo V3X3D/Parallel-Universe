@@ -215,7 +215,7 @@ gA.collision = (function() {
       grid[2][1] = (gA.lvl.cur.map[cTY+1][cTX]); // Below
       grid[2][2] = (gA.lvl.cur.map[cTY+1][cTX+1]); // Bottom Right Corner
     }
-    return { grid, cTX, cTY };
+    return { grid: grid, cTX: cTX, cTY: cTY };
   }
 
   return {

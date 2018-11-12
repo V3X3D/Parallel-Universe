@@ -119,16 +119,20 @@
         this.state.home = true;
         this.state.stats = false;
       } else if(gA.key.right && gA.title.stats.cur < Object.keys(gA.lvl.list).length) {
+        gA.sound.cursor.play();
         gA.title.stats.cur += 1;
         gA.key.right = false;
       } else if(gA.key.left && gA.title.stats.cur > 1) {
+        gA.sound.cursor.play();
         gA.title.stats.cur -= 1;
         gA.key.left = false;
       } else if(gA.key.up) {
+        gA.sound.cursor.play();
         if(gA.title.stats.cur+5 > Object.keys(gA.lvl.list).length) gA.title.stats.cur = Object.keys(gA.lvl.list).length;
         else gA.title.stats.cur += 5;
         gA.key.up = false;
       } else if(gA.key.down) {
+        gA.sound.cursor.play();
         if(gA.title.stats.cur-5 < 1) gA.title.stats.cur = 1;
         else gA.title.stats.cur -= 5;
         gA.key.down = false;
@@ -411,6 +415,7 @@ gA.title.run = (function() {
       else if(this.state.credits) gA.title.credits.update.bind(this)();
       else if(this.state.options) gA.title.options.update.bind(this)();
       gA.sound.ambient.play();
+      // gA.sound.ambient.play();
     };
     this.render = function() {
       this.intro.render();

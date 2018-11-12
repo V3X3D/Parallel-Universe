@@ -47,7 +47,7 @@ gA.player = (function() {
         //Focus
         if(this.focused) {
           gA.hud.state.pace = 450;
-          gA.heart.pace(1.75);
+          gA.heart.pace(2.00);
           if(this.focusAni === undefined) this.focusAni = new gA.animations.focus();
         } else {
           gA.hud.state.pace = 1000;
@@ -239,4 +239,3 @@ gA.player = (function() {
 
   return { state: new playerInit() };
 })();
-

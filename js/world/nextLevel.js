@@ -12,6 +12,8 @@ gA.nextLevel = (function() {
     if(gA.lvl.num !== 0) {
       if(gA.lvl.cur.curDeaths < gA.lvl.cur.minDeaths || isNaN(gA.lvl.cur.minDeaths))
         gA.lvl.cur.minDeaths = gA.lvl.cur.curDeaths;
+      if(gA.lvl.cur.curDeaths > gA.lvl.cur.maxDeaths || isNaN(gA.lvl.cur.maxDeaths))
+        gA.lvl.cur.maxDeaths = gA.lvl.cur.curDeaths;
 
       gA.lvl.cur.curDeaths = 0;
     }

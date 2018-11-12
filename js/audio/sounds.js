@@ -30,7 +30,7 @@ gA.sound = (function() {
     this.fade = false;
     this.volumeFade = function() {
       if(gA.masterVolume-amt >= 0) volume = gA.masterVolume-amt;
-      else volume = 0;
+      else { volume = 0; this.fade = false; }
       amt += 0.035;
       audio[0].volume = volume;
     };
@@ -96,5 +96,5 @@ gA.sound = (function() {
     };
   };
 
-  return { jump, ambient: new ambient, death: new death, flatline, focus, respawn, portal, swipe, timer, cursor: new cursor, volumeSet: volumeSet };
+  return { jump: jump, ambient: new ambient, death: new death, flatline: flatline, focus: focus, respawn: respawn, portal: portal, swipe: swipe, timer: timer, cursor: new cursor, volumeSet: volumeSet };
 })();
