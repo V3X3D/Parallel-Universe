@@ -16,15 +16,15 @@ gA.map = (function() {
     this.tX = 0;
     this.tY = 0;
 
-    this.render = function() {
+    this.render = function(setup) {
       bg = gA.ctx.m.fillStyle = 'rgb('+gA.bgClr.R+','+gA.bgClr.G+','+gA.bgClr.B+')';
       fg = gA.ctx.m.fillStyle = 'rgb('+gA.fgClr.R+','+gA.fgClr.G+','+gA.fgClr.B+')';
 
       bgArr = gA.bgClr;
       fgArr = {R: gA.fgClr.R, G: gA.fgClr.G, B: gA.fgClr.B};
 
-      for(var y=0; y < gA.level.map.length; y+=1) {
-        for(var x=0; x < gA.level.map[y].length; x+=1) {
+      for(var y=0; y<gA.level.map.length; y+=1) {
+        for(var x=0; x<gA.level.map[y].length; x+=1) {
           this.tX = x * gA.tS;
           this.tY = y * gA.tS;
 
@@ -102,13 +102,21 @@ gA.map = (function() {
             // gA.ctx.m.fillStyle = fg;
             // gA.ctx.m.fillRect(this.tX+gA.tS/4, this.tY, gA.tS/2, gA.tS/8);
           } else if (gA.level.map[y][x] === 12) {
-            aniTiles.push(new gA.entity.windGenerator(this.tX, this.tY, fgArr));
+            gA.ctx.m.fillStyle = fg;
+            gA.ctx.m.fillRect(this.tX, this.tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
+            if(setup)
+              aniTiles.push(new gA.entity.windGen(this.tX, this.tY, fgArr));
           } else if (gA.level.map[y][x] === 13) {
-            aniTiles.push(new gA.entity.windGenerator(this.tX, this.tY, bgArr));
+            gA.ctx.m.fillStyle = bg;
+            gA.ctx.m.fillRect(this.tX, this.tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
+            if(setup)
+              aniTiles.push(new gA.entity.windGen(this.tX, this.tY, bgArr));
           } else if (gA.level.map[y][x] === 14) {
-            aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, bg, fg));
+            if(setup)
+              aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, bg, fg));
           } else if (gA.level.map[y][x] === 15) {
-            aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, fg, bg));
+            if(setup)
+              aniTiles.push(new gA.entity.levelWarp(this.tX, this.tY, fg, bg));
           }
 
         }
@@ -119,10 +127,10 @@ gA.map = (function() {
   function animated() {
     var key;
     this.update = function() {
-      for(var i = 0; i < aniTiles.length; i+=1) aniTiles[i].logic();
+      for(var i=0; i<aniTiles.length; i+=1) aniTiles[i].logic();
     };
     this.render = function() {
-      for(var i = 0; i < aniTiles.length; i+=1) aniTiles[i].draw();
+      for(var i=0; i<aniTiles.length; i+=1) aniTiles[i].draw();
     };
   }
 

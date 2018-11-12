@@ -22,22 +22,22 @@ gA.entity = (function() {
     };
 
     this.draw = function() {
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x, this.y);
+      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
       gA.ctx.g.rotate(this.rotation*Math.PI/180);
       gA.ctx.g.fillStyle = bColor;
       gA.ctx.g.fillRect(-gA.tS/4, -gA.tS/4, gA.tS/2, gA.tS/2);
 
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x, this.y);
+      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
       gA.ctx.g.rotate(this.rotation2*Math.PI/180);
       gA.ctx.g.fillStyle = fColor;
-      gA.ctx.g.fillRect(0-this.s/2, 0-this.s/2, this.s, this.s);
+      gA.ctx.g.fillRect(-this.s/2, -this.s/2, this.s, this.s);
 
       gA.ctx.g.setTransform(1,0,0,1,0,0);
     };
   };
 
   /*WIND AND WIND GENERATOR*/
-  var windGenerator = function(tX, tY, color) {
+  var windGen = function(tX, tY, color) {
     var i;
 
     this.array = [];
@@ -45,7 +45,7 @@ gA.entity = (function() {
     this.color = 'rgb('+color.R+','+color.G+','+color.B+')';
 
     this.logic = function() {
-      if(this.countingDown === false) {
+      if(!this.countingDown) {
         this.countingDown = true;
         setTimeout(function() {
           this.array.push(new windBlowing(tX, tY+gA.tS/4, color));
@@ -53,15 +53,13 @@ gA.entity = (function() {
         }.bind(this), Math.floor(Math.random()*200)+40);
       }
 
-      for(i = 0; i < this.array.length; i+=1) {
+      for(i=0; i<this.array.length; i+=1) {
         this.array[i].logic();
         if(this.array[i].A <= 0) this.array.splice(i, 1);
       }
     };
     this.draw = function() {
-      gA.ctx.m.fillStyle = this.color;
-      gA.ctx.m.fillRect(tX, tY+gA.tS-gA.tS/8, gA.tS, gA.tS/8);
-      for(i = 0; i < this.array.length; i+=1) this.array[i].draw();
+      for(i=0; i<this.array.length; i+=1) this.array[i].draw();
     };
   };
 
@@ -94,7 +92,7 @@ gA.entity = (function() {
     };
 
     this.draw = function() {
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x+gA.tS/2, this.y+gA.tS/2);
+      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x+gA.tS/2, this.y-gA.cam.state.y+gA.tS/2);
       gA.ctx.g.rotate(this.rotation*Math.PI/180);
       gA.ctx.g.fillStyle = this.color;
       gA.ctx.g.fillRect(-gA.tS/4, -gA.tS/4, this.size, this.size);
@@ -105,7 +103,7 @@ gA.entity = (function() {
 
   return {
     levelWarp: levelWarp,
-    windGenerator: windGenerator
+    windGen: windGen
   };
 
 })();

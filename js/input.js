@@ -7,7 +7,9 @@ gA.input = (function() {
     left: false,
     right: false,
     up: false,
-    down: false
+    down: false,
+    esc: false,
+    select: false
   };
   gA.noHold = {
     up: false
@@ -19,13 +21,20 @@ gA.input = (function() {
 
     if (key === 37 || key === 65) {
       gA.key.left = true;
-    } else if (key === 38 || key === 32 || key === 87) {
+    } else if (key === 38 || key === 87) {
       gA.key.up = true;
     } else if (key === 39 || key === 68) {
       gA.key.right = true;
+    } else if (key === 83 || key === 40) {
+      gA.key.down = true;
+    } else if (key === 32 || key === 13) {
+      if(gA.state.pauseMenu || gA.state.titleScreen) gA.key.select = true;
+      else if(key !== 13) gA.key.up = true;
     }
 
-    if (gA.player.state.alive === false) {
+    if(key === 27) gA.key.esc = true;
+
+    if (!gA.player.state.alive) {
       switch (key) { //Make sure not hitting any default movement keys to reset
         case 32:
         case 37:
@@ -51,12 +60,18 @@ gA.input = (function() {
 
     if (key === 37 || key === 65) {
       gA.key.left = false;
-    } else if (key === 38 || key === 32 || key === 87) {
+    } else if (key === 38 || key === 87) {
       gA.key.up = false;
       gA.noHold.up = false;
     } else if (key === 39 || key === 68) {
       gA.key.right = false;
+    } else if (key === 83 || key === 40) {
+      gA.key.down = false;
+    } else if (key === 32) {
+      gA.key.up = false;
     }
+
+    if(key === 27) gA.key.esc = false;
   };
 
 })();

@@ -1,4 +1,5 @@
-gA.player = (function() { "use strict";
+gA.player = (function() {
+  "use strict";
 
   var particles = [];
   var nearGround;
@@ -14,7 +15,7 @@ gA.player = (function() { "use strict";
     this.wind = false;
     this.gravConst = 1;
     this.grav = this.gravConst;
-    this.gravMax = 14;
+    this.gravMax = 16;
     this.vyConst = -12;
     this.vy = this.vyConst;
 
@@ -29,18 +30,17 @@ gA.player = (function() { "use strict";
       this.B = gA.level.player.color[2];
       this.A = 1;
     }
-
     this.color = 'rgba('+this.R+','+this.G+','+this.B+','+this.A+')';
+
     this.action;
-
-    this.respawn = false;
-
     this.gravCollide;
     this.leftCollide;
     this.rightCollide;
     this.jumpCollide;
     this.windCollide;
 
+    this.locked = false;
+    this.respawn = false;
     this.spawnAni;
 
     var grid;
@@ -50,24 +50,21 @@ gA.player = (function() { "use strict";
       //Make collision grid + get player in map grid position
       grid = new gA.collision.map(this.x, this.y, this.w, this.h).update();
 
-      if(this.alive && gA.state.transition === false) {
-        //Jump and Gravity
-        if (this.wind === true) {
-          windActive(this, grid);
-        } else if (this.jump === true) {
-          jumpActive(this, grid);
-        } else {
-          gravActive(this, grid);
-        }
+      if(this.alive && !gA.state.transition && !this.locked) {
+        // console.log(this.grav);
 
-        if (gA.key.up === true && this.jump === false && gA.noHold.up === false) {
+        //Jump and Gravity
+        if (this.wind) windActive(this, grid);
+        else if (this.jump) jumpActive(this, grid);
+        else gravActive(this, grid);
+
+        if (gA.key.up && !this.jump && !gA.noHold.up) {
           gA.noHold.up = true;
           if (this.gravCollide.tY !== undefined) this.jump = true; // If Gravity
         }
         //Do not put these about jump and gravity or spike collision is not perfect
-        if (gA.key.left === true) leftActive(this, grid);
-        if (gA.key.right === true) rightActive(this, grid);
-
+        if (gA.key.left) leftActive(this, grid);
+        if (gA.key.right) rightActive(this, grid);
       }
     };
 
@@ -80,14 +77,11 @@ gA.player = (function() { "use strict";
       this.color = 'rgba('+this.R+','+this.G+','+this.B+','+this.A+')';
       gA.ctx.g.fillStyle = this.color;
 
-      if(this.alive) {
-        gA.ctx.g.fillRect(this.x, this.y, this.w, this.h);
-      } else {
-        this.A -= 0.2; // Fade out if dead
-        gA.ctx.g.fillRect(this.x, this.y, this.w, this.h);
-      }
+      if(!this.alive) this.A -= 0.2; // Fade out if dead
 
-      if(this.respawn === true) {
+      gA.ctx.g.fillRect(this.x, this.y, this.w, this.h);
+
+      if(this.respawn) {
         this.spawnAni.update();
         this.spawnAni.draw();
       }
@@ -170,6 +164,7 @@ gA.player = (function() { "use strict";
     if(obj.gravCollide === 'wind') { /*WIND*/
       obj.wind = true;
     } else if(obj.gravCollide) { /*BLOCK/SPIKE*/
+      if(obj.gravCollide === 'spike') death(obj);
       if(obj.grav >= 0) {
         if(obj.gravCollide.tY !== undefined) obj.y = obj.gravCollide.tY - obj.h;
       } else if(obj.grav < 0) {
@@ -177,7 +172,6 @@ gA.player = (function() { "use strict";
       }
       obj.grav = obj.gravConst;
       obj.vy = obj.vyConst;
-      if(obj.gravCollide === 'spike') death(obj);
     } else { /*FALLING*/
       if (obj.grav < obj.gravMax) obj.grav += 1;
       obj.y += obj.grav;
@@ -214,17 +208,22 @@ gA.player = (function() { "use strict";
 
   // Spike collision
   function death(obj) {
-    if(obj.alive !== false)  {
+    if(obj.alive)  {
+      gA.deathNum += 1;
+      gA.level.deaths += 1;
+
+      gA.cam.state.shake = true;
+      gA.cam.state.offset = obj.grav;
+
       obj.windCollide = '';
       obj.gravCollide = '';
       obj.leftCollide = '';
       obj.rightCollide = '';
       obj.jumpCollide = '';
+      obj.respawn = false;
 
-      for(var i = 0; i < Math.floor(Math.random() * 16)+18; i+=1) {
-      // for(var i = 0; i < Math.floor(Math.random() * 3); i+=1) {
+      for(var i=0; i<Math.floor(Math.random() * 16)+18; i+=1)
         new gA.blood.make(23);
-      }
 
       obj.alive = false;
     }

@@ -4,7 +4,6 @@ gA.blood = (function() {
   var array = [];
 
   var inc = 50;
-  var flip = 127.5;
   var i;
 
   var make = function(range) {
@@ -23,25 +22,23 @@ gA.blood = (function() {
     if(!gA.level.bloodClr) {
       this.RGBorig = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
-      this.RGB = colorAjust(this.RGB, inc);
+      this.RGB = gA.colorAjust(this.RGB, inc);
 
       if(this.invert === 1) {
         if(gA.invertClr(this.RGBorig[0]) === gA.fgClr.R && gA.invertClr(this.RGBorig[1]) === gA.fgClr.G && gA.invertClr(this.RGBorig[2]) === gA.fgClr.B) {
           this.RGB = [gA.invertClr(this.RGB[0]), gA.invertClr(this.RGB[1]), gA.invertClr(this.RGB[2])];
         } else {
           this.RGB = [gA.fgClr.R, gA.fgClr.G, gA.fgClr.B];
-          this.RGB = colorAjust(this.RGB, inc);
+          this.RGB = gA.colorAjust(this.RGB, inc);
         }
       }
     } else {
       this.RGB = [gA.level.bloodClr.R, gA.level.bloodClr.G, gA.level.bloodClr.B];
       if(!gA.level.bloodShft)
-        this.RGB = colorAjust(this.RGB, 0);
+        this.RGB = gA.colorAjust(this.RGB, 0);
       else
-        this.RGB = colorAjust(this.RGB, Math.floor(Math.random() * (gA.level.bloodShft.max - gA.level.bloodShft.min + 1)) + gA.level.bloodShft.min);
+        this.RGB = gA.colorAjust(this.RGB, Math.floor(Math.random() * (gA.level.bloodShft.max - gA.level.bloodShft.min + 1)) + gA.level.bloodShft.min);
     }
-
-
     this.color = 'rgba('+ this.RGB[0] +','+this.RGB[1]+','+ this.RGB[2] +',1)';
 
     this.gravConst = 3;
@@ -63,13 +60,9 @@ gA.blood = (function() {
       //Make collision grid + get map tilePos
       grid = new gA.collision.map(this.x, this.y, this.w, this.h).update();
 
-      if(this.jump === true) {
-        jumpActive(this, grid);
-      } else if (this.wind === true) {
-        windActive(this, grid);
-      } else {
-        gravActive(this, grid);
-      }
+      if(this.jump) jumpActive(this, grid);
+      else if (this.wind) windActive(this, grid);
+      else gravActive(this, grid);
 
       this.y += this.vy;
       this.x += this.vx;
@@ -148,29 +141,14 @@ gA.blood = (function() {
     }
   }
 
-  function colorAjust(colors, flux) {
-    for(i = 0; i < colors.length; i+=1) {
-      if(colors[i] !== undefined) {
-        if(colors[i] < flip) colors[i] += flux;
-        else if(colors[i] > flip) colors[i] -= flux;
-      }
-
-      if(colors[i] === undefined) colors[i] = 0;
-
-      if(colors[i] < 0) colors[i] = 0;
-      else if(colors[i] > 255) colors[i] = 255;
-    }
-    return colors;
-  }
-
   var init = function() {
     var i;
 
     this.update = function() {
-      for(i = 0; i < array.length; i += 1) array[i].update();
+      for(i=0; i<array.length; i+=1) array[i].update();
     };
     this.render = function() {
-      for(i = 0; i < array.length; i += 1) array[i].render();
+      for(i= 0; i<array.length; i+=1) array[i].render();
     };
   };
 

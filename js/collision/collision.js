@@ -2,91 +2,88 @@ gA.collision = (function() {
   "use strict";
 
   //Line Segment Collision Test Vars
-  var triRight, triLeft, triBottom, pTop, pLeft, pRight, pBottom,
-      triTopL, triTopR, triBottomM, triBottomL, triBottomR, triTopM,
-      tX, tY, xPos, yPos;
+  var triR, triL, pT, pL, pR, pB, triTL, triTR, triBM, triBL, triBR, triTM,
+    tX, tY, xPos, yPos;
 
   function rectRect(x1, y1, x2, y2, tSw, tSh, tS2w, tS2h) {
-    var tSize2w = tS2w || tSw,
-      tSize2h = tS2h || tSh;
+    tS2w = tS2w || tSw;
+    tS2h = tS2h || tSh;
 
-    if(x1+tSw > x2 && x1 < x2+tSize2w && y1+tSh > y2 && y1 < y2+tSize2h) {
-      return true;
-    }
+    if(x1+tSw > x2 && x1 < x2+tS2w && y1+tSh > y2 && y1 < y2+tS2h) return true;
     return false;
   }
 
   //Spike Collision Functions
   function fullSpikeUpCollision(tX, tY, obj, side) {
-    triBottomL = [tX, tY+gA.tS];
-    triBottomR = [tX+gA.tS, tY+gA.tS];
-    triTopM = [tX+gA.tS/2, tY];
+    triBL = [tX, tY+gA.tS];
+    triBR = [tX+gA.tS, tY+gA.tS];
+    triTM = [tX+gA.tS/2, tY];
 
-    triLeft = new gA.segment.make(triBottomL[0], triBottomL[1], gA.tS/2, -gA.tS);
-    triRight = new gA.segment.make(triBottomR[0], triBottomR[1], -gA.tS/2, -gA.tS);
+    triL = new gA.segment.make(triBL[0], triBL[1], gA.tS/2, -gA.tS);
+    triR = new gA.segment.make(triBR[0], triBR[1], -gA.tS/2, -gA.tS);
 
-    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
-    pBottom = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
+    pL = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pB = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
-    if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pBottom)) return true;
+    if(triR.intersect(pL) || triL.intersect(pR) || triL.intersect(pB)) return true;
     return false;
   }
   function fullSpikeDownCollision(tX, tY, obj) {
-    triTopL = [tX, tY];
-    triTopR = [tX+gA.tS, tY];
-    triBottomM = [tX+gA.tS/2, tY+gA.tS];
+    triTL = [tX, tY];
+    triTR = [tX+gA.tS, tY];
+    triBM = [tX+gA.tS/2, tY+gA.tS];
 
-    triLeft = new gA.segment.make(triTopL[0], triTopL[1], gA.tS/2, gA.tS);
-    triRight = new gA.segment.make(triTopR[0], triTopR[1], -gA.tS/2, gA.tS);
+    triL = new gA.segment.make(triTL[0], triTL[1], gA.tS/2, gA.tS);
+    triR = new gA.segment.make(triTR[0], triTR[1], -gA.tS/2, gA.tS);
 
-    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
-    pTop = new gA.segment.make(obj.x, obj.y, obj.w, 0);
+    pL = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pT = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
-    if(triRight.intersect(pLeft) || triLeft.intersect(pRight) 
-      || triLeft.intersect(pTop) || triRight.intersect(pTop)) {
+    if(triR.intersect(pL) || triL.intersect(pR) 
+      || triL.intersect(pT) || triR.intersect(pT)) {
       return true;
     }
     return false;
   }
   function halfSpikeUpCollision(tX, tY, obj) {
-    triBottomL = [( tX )+gA.tS/4, tY+gA.tS];
-    triBottomR = [( tX+gA.tS )-gA.tS/4, tY+gA.tS];
-    triTopM = [tX+gA.tS/2, tY+gA.tS/2];
+    triBL = [( tX )+gA.tS/4, tY+gA.tS];
+    triBR = [( tX+gA.tS )-gA.tS/4, tY+gA.tS];
+    triTM = [tX+gA.tS/2, tY+gA.tS/2];
 
-    triLeft = new gA.segment.make(triBottomL[0], triBottomL[1], gA.tS/4, -gA.tS/2);
-    triRight = new gA.segment.make(triBottomR[0], triBottomR[1], -gA.tS/4, -gA.tS/2);
+    triL = new gA.segment.make(triBL[0], triBL[1], gA.tS/4, -gA.tS/2);
+    triR = new gA.segment.make(triBR[0], triBR[1], -gA.tS/4, -gA.tS/2);
 
-    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
-    pBottom = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
+    pL = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pB = new gA.segment.make(obj.x, obj.y+obj.h, obj.w, 0);
 
-    if(triRight.intersect(pLeft) || triLeft.intersect(pRight) || triLeft.intersect(pBottom)) return true;
+    if(triR.intersect(pL) || triL.intersect(pR) || triL.intersect(pB)) return true;
     return false;
   }
   function halfSpikeDownCollision(tX, tY, obj) {
-    triTopL = [( tX )+gA.tS/4, tY];
-    triTopR = [( tX+gA.tS )-gA.tS/4, tY];
-    triBottomM = [tX+gA.tS/2, tY+gA.tS/2];
+    triTL = [( tX )+gA.tS/4, tY];
+    triTR = [( tX+gA.tS )-gA.tS/4, tY];
+    triBM = [tX+gA.tS/2, tY+gA.tS/2];
 
-    triLeft = new gA.segment.make(triTopL[0], triTopL[1], gA.tS/4, gA.tS/2);
-    triRight = new gA.segment.make(triTopR[0], triTopR[1], -gA.tS/4, gA.tS/2);
+    triL = new gA.segment.make(triTL[0], triTL[1], gA.tS/4, gA.tS/2);
+    triR = new gA.segment.make(triTR[0], triTR[1], -gA.tS/4, gA.tS/2);
 
-    pLeft = new gA.segment.make(obj.x, obj.y, 0, obj.h);
-    pRight = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
-    pTop = new gA.segment.make(obj.x, obj.y, obj.w, 0);
+    pL = new gA.segment.make(obj.x, obj.y, 0, obj.h);
+    pR = new gA.segment.make(obj.x+obj.w, obj.y, 0, obj.h);
+    pT = new gA.segment.make(obj.x, obj.y, obj.w, 0);
 
-    if(triRight.intersect(pLeft) || triLeft.intersect(pRight) 
-      || triLeft.intersect(pTop) || triRight.intersect(pTop)) {
+    if(triR.intersect(pL) || triL.intersect(pR) 
+      || triL.intersect(pT) || triR.intersect(pT)) {
         return true;
     }
     return false;
   }
 
   function smartMove(obj, map, cTX, cTY, xDif, yDif) {
-    for(var y=0; y < map.length; y+=1) {
-      for(var x=0; x < map[y].length; x+=1) {
+    for(var y=0; y<map.length; y+=1) {
+      for(var x=0; x<map[y].length; x+=1) {
 
         tX = (x * gA.tS) + (cTX-1)*gA.tS;
         tY = (y * gA.tS) + (cTY-1)*gA.tS;
@@ -160,10 +157,8 @@ gA.collision = (function() {
 
           if (map[y][x] === 14 || map[y][x] === 15) {
             if(obj.type !== 'blood') {
-              if (xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4
-                && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
+              if (xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4 && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
                 gA.state.transition = true;
-                gA.transitions.fadeToggle();
               }
             }
           }
@@ -198,7 +193,7 @@ gA.collision = (function() {
       }
       if (gA.level.map[this.cTY] !== undefined) {
         this.grid[1][0] = (gA.level.map[this.cTY][this.cTX-1]); // Left
-        this.grid[1][1] = (gA.level.map[this.cTY][this.cTX]); // Player // Not needed if just looking for spike edge collision
+        this.grid[1][1] = (gA.level.map[this.cTY][this.cTX]); // Player //Needed for things like wind
         this.grid[1][2] = (gA.level.map[this.cTY][this.cTX+1]); // Right
       }
       if (gA.level.map[this.cTY+1] !== undefined) {

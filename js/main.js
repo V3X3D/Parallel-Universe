@@ -11,10 +11,13 @@
   gA.level; //Current level
   gA.bgClr; //Background color
   gA.fgClr; //Foreground color
+  gA.deathNum = 0;
 
   gA.state = {
-    titleScreen: false,
-    transition: true
+    titleScreen: true,
+    pauseMenu: false,
+    gameRunning: false,
+    transition: false
   };
 
   window.onload = function() {
@@ -24,29 +27,58 @@
     var FPS = new gA.fps.init();
     var Transition = new gA.transitions.fade();
 
-    gA.map.init.render();
+    gA.map.init.render(true);
     function gameLoop() {
 
-      //Game State Updating
-      gA.bg.init.update();
-      gA.player.state.update();
-      gA.map.animated.update();
-      Blood.update();
-      // console.time('Function #1');
-      if(gA.state.transition === true) Transition.update();
-      // FPS.update();
-
-      //Game Drawing
       Canvas.render();
-      gA.bg.init.render();
-      gA.player.state.render();
-      gA.map.animated.render();
-      Blood.render();
-      if(gA.state.transition === true) Transition.render();
-      // FPS.render();
+      if(gA.state.gameRunning) {
+        /*Game Updating*/
+        gA.bg.init.update();
+        gA.cam.state.update();
+        gA.player.state.update();
+        gA.map.animated.update();
+        Blood.update();
+        // gA.overlay.state.update();
+        if(gA.state.transition) Transition.update();
+        if(gA.key.esc && !gA.pause.menu.done) {
+          gA.state.pauseMenu = true;
+          gA.state.gameRunning = false;
+        }
+
+        /*GAME DRAWING*/
+        gA.ctx.g.save();
+        gA.ctx.g.translate(-gA.cam.state.x, -gA.cam.state.y);
+          gA.player.state.render();
+          Blood.render();
+          gA.map.animated.render();
+        gA.ctx.g.restore();
+
+        gA.bg.init.render();
+
+        gA.ctx.m.save();
+        gA.ctx.m.translate(-gA.cam.state.x, -gA.cam.state.y);
+          gA.map.init.render();
+        gA.ctx.m.restore();
+        // gA.overlay.state.render();
+        if(gA.state.transition) Transition.render();
+      } else if(gA.state.pauseMenu || gA.state.titleScreen) {
+        if(gA.state.pauseMenu) {
+          gA.pause.menu.update();
+          gA.pause.menu.render();
+        } else if(gA.state.titleScreen) {
+          gA.title.menu.update();
+          gA.title.menu.render();
+          gA.transitions.reset();
+        }
+        gA.change.state.update();
+        gA.change.state.render();
+      }
+
+      FPS.update();
+      FPS.render();
 
       window.requestAnimationFrame(gameLoop);
-      // setTimeout(gameLoop, 50);
+      // setTimeout(gameLoop, 40);
     }
     gameLoop();
   };

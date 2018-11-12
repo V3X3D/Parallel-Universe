@@ -1,14 +1,17 @@
 (function() {
   "use strict";
 
-  function sequence1(spd, dir) { //Bottom to Top
+  function sequence1(spd, dir, offset) { //Bottom to Top
     /*Info*/
-    //Dir can be 'T' or 'B'.
+    //Dir can be 'U' or 'D'.
+    //Offset, is true or false
 
     this.x = 0;
     this.y = gA.cH;
     this.w = gA.cW;
     this.h = gA.cH;
+
+    if(!offset) this.y -= gA.cH;
 
     this.logic = function() {
       if(dir === 'D' || dir === undefined) {
@@ -35,10 +38,10 @@
     this.w = gA.cW;
     this.h = gA.cH/2;
 
-    if(side === 'T' || side === undefined) { this.y = 0; }
-    else { this.y = gA.cH/2; }
+    if(side === 'T' || side === undefined) this.y = 0;
+    else this.y = gA.cH/2;
 
-    if(offset === true) this.x += gA.cW;
+    if(!offset) this.x += gA.cW;
 
     this.logic = function() {
       if(dir === 'R' || dir === undefined) {
@@ -64,10 +67,10 @@
     this.w = gA.cW/2;
     this.h = gA.cH;
 
-    if(side === 'L' || side === undefined) { this.x = 0; }
-    else { this.x = gA.cW/2; }
+    if(side === 'L' || side === undefined) this.x = 0;
+    else this.x = gA.cW/2;
 
-    if(offset === true) this.y += gA.cH;
+    if(!offset) this.y += gA.cH;
 
     this.logic = function() {
       if(dir === 'D' || dir === undefined) {
