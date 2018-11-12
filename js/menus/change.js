@@ -3,7 +3,7 @@ gA.change = (function() {
 
   var array = [];
 
-  var fade = function(type, action, spd) {
+  var fade = function(type, action, spd, audio) {
     this.x = 0;
     this.y = 0;
     this.spd = spd || 0.1;
@@ -13,6 +13,7 @@ gA.change = (function() {
     else this.A = 0;
 
     this.logic = function() {
+      if(audio) gA.sound.ambient.fade = true;
       if(type === 'out') {
         if(this.A < 1) this.A += this.spd;
         if(this.A > 1) this.A = 1;
@@ -22,6 +23,10 @@ gA.change = (function() {
       }
 
       if(this.A <= 0 || this.A >= 1) {
+        if(audio) {
+          gA.sound.ambient.pause();
+          gA.sound.ambient.fade = false;
+        }
         gA.state.transition = false;
         if(action !== undefined) action();
       }

@@ -34,7 +34,10 @@ gA.pause.home = {
         gA.lvl.cur.curDeath = 0;
         gA.state.pauseMenu = false;
         gA.map.aniClear();
+        gA.transition = false;
         this.cursor.share.selected = 0;
+        gA.lvl.cur.curDeaths = 0;
+        gA.saveLevels();
         gA.state.titleScreen = true;
         gA.title.run.menu.called = true;
       }
@@ -42,6 +45,7 @@ gA.pause.home = {
   ],
   update: function() {
     if(gA.key.esc && !gA.noHold.esc) {
+      this.once = false;
       gA.noHold.esc = true;
       closeMenu(this);
     } else this.cursor.update();
@@ -82,19 +86,19 @@ gA.pause.stats = {
 
     gA.ctx.g.fillStyle = gA.pause.run.menu.color;
     gA.ctx.g.font = ''+gA.cW/28+'px monospace';
-    gA.ctx.g.fillText('Death Count', gA.tS, gA.cH/2+gA.tS*2-gA.tS/4);
+    gA.ctx.g.fillText('Death Count', gA.tS, gA.cH/2+gA.tS*2);
     gA.ctx.g.font = ''+gA.cW/32+'px monospace';
-    gA.ctx.g.fillText('Cur: '+gA.lvl.cur.curDeaths+'', gA.tS, gA.cH/2+gA.tS*4-gA.tS/4);
-    gA.ctx.g.fillText('Min: '+gA.lvl.cur.minDeaths+'', gA.tS, gA.cH/2+gA.tS*5-gA.tS/4);
-    gA.ctx.g.fillText('Max: '+gA.lvl.cur.maxDeaths+'', gA.tS, gA.cH/2+gA.tS*6-gA.tS/4);
+    gA.ctx.g.fillText('Cur: '+gA.lvl.cur.curDeaths+'', gA.tS, gA.cH/2+gA.tS*4);
+    gA.ctx.g.fillText('Min: '+gA.lvl.cur.minDeaths+'', gA.tS, gA.cH/2+gA.tS*5);
+    gA.ctx.g.fillText('Max: '+gA.lvl.cur.maxDeaths+'', gA.tS, gA.cH/2+gA.tS*6);
 
     gA.ctx.g.font = ''+gA.cW/28+'px monospace';
     w = gA.ctx.g.measureText('Time Count').width;
-    gA.ctx.g.fillText('Time Count', gA.cW-w-gA.tS, gA.cH/2+gA.tS*2-gA.tS/4);
+    gA.ctx.g.fillText('Time Count', gA.cW-w-gA.tS, gA.cH/2+gA.tS*2);
     gA.ctx.g.font = ''+gA.cW/32+'px monospace';
-    gA.ctx.g.fillText('Cur: '+gA.lvl.cur.curTime+'', gA.cW-w-gA.tS, gA.cH/2+gA.tS*4-gA.tS/4);
-    gA.ctx.g.fillText('Min: '+gA.lvl.cur.minTime+'', gA.cW-w-gA.tS, gA.cH/2+gA.tS*5-gA.tS/4);
-    gA.ctx.g.fillText('Max: '+gA.lvl.cur.maxTime+'', gA.cW-w-gA.tS, gA.cH/2+gA.tS*6-gA.tS/4);
+    gA.ctx.g.fillText('Cur: '+gA.lvl.cur.curTime+'', gA.cW-w-gA.tS, gA.cH/2+gA.tS*4);
+    gA.ctx.g.fillText('Min: '+gA.lvl.cur.minTime+'', gA.cW-w-gA.tS, gA.cH/2+gA.tS*5);
+    gA.ctx.g.fillText('Max: '+gA.lvl.cur.maxTime+'', gA.cW-w-gA.tS, gA.cH/2+gA.tS*6);
   }
 };
 
@@ -132,6 +136,11 @@ gA.pause.run = (function() {
     this.update = function() {
       if(!gA.heart.state()) gA.sound.flatline.pause();
       if(gA.heart.state()) gA.heart.pause();
+
+      if(!this.once) {
+        this.once = true;
+        gA.sound.swipe.play();
+      }
 
       this.bgRGB = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.fgRGB = [gA.fgClr.R, gA.fgClr.G, gA.fgClr.B];

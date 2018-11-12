@@ -164,7 +164,6 @@ gA.collision = (function() {
             if(xPos+obj.w > tX+gA.tS/4 && xPos < (tX+gA.tS)-gA.tS/4 && yPos+obj.h > tY+gA.tS/4 && yPos < (tY+gA.tS)-gA.tS/4) {
               gA.transition = true;
               gA.hud.state.freeze = true;
-              gA.sound.portal.currentTime = 0;
               gA.sound.portal.play();
             }
           }
@@ -175,6 +174,12 @@ gA.collision = (function() {
               gA.player.state.focused = false;
               gA.player.state.focusAni = undefined;
               gA.heart.stop();
+              if(gA.lvl.cur.curDeaths < gA.lvl.cur.minDeaths || isNaN(gA.lvl.cur.minDeaths))
+                gA.lvl.cur.minDeaths = gA.lvl.cur.curDeaths;
+
+              gA.timer.reset(true);
+
+              gA.lvl.cur.curDeaths = 0;
               gA.end = true;
             }
           }

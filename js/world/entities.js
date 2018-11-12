@@ -24,7 +24,7 @@ gA.entity = (function() {
 
     this.draw = function() {
       gA.ctx.g.lineWidth = 2;
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
+      gA.ctx.g.setTransform(gA.scale, 0, 0, gA.scale, gA.scale*this.x-gA.cam.state.x, gA.scale*this.y-gA.cam.state.y);
       gA.ctx.g.rotate(this.rotation2*Math.PI/180);
       gA.ctx.g.fillStyle = fColor;
       gA.ctx.g.fillRect(-this.s2/2, -this.s2/2, this.s2, this.s2);
@@ -32,14 +32,14 @@ gA.entity = (function() {
       gA.ctx.g.strokeRect(-this.s2/2, -this.s2/2, this.s2, this.s2);
 
       gA.ctx.g.lineWidth = 1;
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x, this.y-gA.cam.state.y);
+      gA.ctx.g.setTransform(gA.scale, 0, 0, gA.scale, gA.scale*this.x-gA.cam.state.x, gA.scale*this.y-gA.cam.state.y);
       gA.ctx.g.rotate(this.rotation*Math.PI/180);
       gA.ctx.g.fillStyle = bColor;
       gA.ctx.g.fillRect(-this.s/2, -this.s/2, this.s, this.s);
       gA.ctx.g.strokeStyle = fColor;
       gA.ctx.g.strokeRect(-this.s/2, -this.s/2, this.s, this.s);
 
-      gA.ctx.g.setTransform(1,0,0,1,0,0);
+      gA.ctx.g.setTransform(gA.scale,0,0,gA.scale,0,0);
     };
   };
 
@@ -99,12 +99,13 @@ gA.entity = (function() {
     };
 
     this.draw = function() {
-      gA.ctx.g.setTransform(1, 0, 0, 1, this.x-gA.cam.state.x+gA.tS/2, this.y-gA.cam.state.y+gA.tS/2);
+      gA.ctx.g.setTransform(gA.scale, 0, 0, gA.scale, gA.scale*this.x-gA.cam.state.x+gA.tS/2, gA.scale*this.y-gA.cam.state.y+gA.tS/2);
       gA.ctx.g.rotate(this.rotation*Math.PI/180);
       gA.ctx.g.fillStyle = this.color;
       gA.ctx.g.fillRect(-gA.tS/4, -gA.tS/4, this.size, this.size);
 
-      gA.ctx.g.setTransform(1,0,0,1,0,0);
+      gA.ctx.g.setTransform(gA.scale,0,0,gA.scale,0,0);
+      // gCtx.scale(gA.scale,gA.scale);
     };
   };
 

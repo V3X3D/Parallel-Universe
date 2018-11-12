@@ -24,6 +24,7 @@ gA.intro = (function() {
     delay: 40,
     action: function() {
       if(this.delay > 0) this.delay -= 1;
+      if(this.x < -gA.cW/2 && this.delay <= 0) { gA.sound.swipe.play(); }
       if(this.x < 0 && this.delay <= 0) {
         this.x += this.spd;
         if(this.x > 0) this.x = 0;
@@ -43,6 +44,9 @@ gA.intro = (function() {
     action: function() {
       if(this.delay > 0) this.delay -= 1;
       if(this.y > gA.cH/2 && this.delay <= 0) {
+        gA.sound.swipe.currentTime = 0;
+        gA.sound.swipe.pause();
+        gA.sound.swipe.play();
         this.y -= this.spd;
         if(this.y < gA.cH/2) this.y = gA.cH/2;
       }

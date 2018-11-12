@@ -52,6 +52,7 @@ gA.transitions = (function() {
         }, 650);
         var timeOut2 = setTimeout(function() {
           gA.player.state.end = true;
+          gA.contentLock30 = false;
         }, 1750);
       }
     };

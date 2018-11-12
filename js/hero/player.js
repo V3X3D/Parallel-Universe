@@ -35,13 +35,12 @@ gA.player = (function() {
     this.end = false;
 
     this.update = function() {
-      
+
       if(this.end) death(this);
       if(!this.alive) {gA.hud.state.pace = 1000; gA.heart.stop();}
       if(this.alive && !gA.transition && !this.locked) {
         grid = new gA.collision.map(this.x, this.y, this.w, this.h);
 
-        gA.sound.flatline.pause();
         if(!gA.heart.state()) gA.heart.start();
         if(gA.hud.state.time <= 0) death(this);
 
@@ -49,7 +48,6 @@ gA.player = (function() {
         if(this.focused) {
           gA.hud.state.pace = 450;
           gA.heart.pace(1.75);
-          // if(this.focusAni === undefined) this.focusAni = new sfAni();
           if(this.focusAni === undefined) this.focusAni = new gA.animations.focus();
         } else {
           gA.hud.state.pace = 1000;
@@ -68,11 +66,12 @@ gA.player = (function() {
         if(gA.key.down && !gA.noHold.down && this.focusAni === undefined && !this.spawn) {
           gA.noHold.down = true;
           this.focused = true;
-          if(this.focused){gA.sound.focus.currentTime = 0; gA.sound.focus.play();}
+          // if(this.focused){gA.sound.focus.currentTime = 0; gA.sound.focus.play();}
+          if(this.focused){gA.sound.focus.play();}
         }
         //Do not put these above jump and gravity or spike collision is not perfect (or not)
-        if(gA.key.left) leftActive(this, grid);
-        if(gA.key.right) rightActive(this, grid);
+        if(gA.key.left && !gA.noHold.left) leftActive(this, grid);
+        if(gA.key.right && !gA.noHold.right) rightActive(this, grid);
       }
     };
 
@@ -145,6 +144,7 @@ gA.player = (function() {
       if(obj.vy >= 0) { //At jump peak, use grav
         obj.jump = false;
       } else {
+        // gA.sound.jump.currentTime = 0;
         gA.sound.jump.play();
         if (obj.vy < obj.gravMax) obj.vy += 1;
         obj.y += obj.vy;
@@ -207,14 +207,15 @@ gA.player = (function() {
   // Spike collision
   function death(obj) {
     if(obj.alive) {
-      gA.sound.death.currentTime = 0;
+      // gA.sound.death.currentTime = 0;
       gA.sound.death.play();
       if(gA.hud.state.time === 0) {
-        gA.sound.flatline.currentTime = 0;
+        // gA.sound.flatline.currentTime = 0;
         gA.sound.flatline.play();
       }
-      gA.deathNum += 1;
+      gA.totalDeaths += 1;
       gA.lvl.cur.curDeaths += 1;
+      gA.lvl.cur.totalDeaths += 1;
 
       if(gA.lvl.cur.curDeaths > gA.lvl.cur.maxDeaths || isNaN(gA.lvl.cur.maxDeaths))
         gA.lvl.cur.maxDeaths = gA.lvl.cur.curDeaths;

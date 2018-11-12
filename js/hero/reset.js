@@ -32,6 +32,7 @@ gA.reset = (function() {
     gA.player.state.spawn = true;
 
     gA.blood.arrayClear();
+    gA.sound.flatline.pause();
     gA.sound.respawn.play();
   }
 

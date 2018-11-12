@@ -37,9 +37,25 @@ gA.cursor = (function() {
           gA.key.select = false;
           opts[k].animation(context, k);
         }
+        if(opts[k].reset !== undefined && opts[k].y === this.curY && gA.key.reset) {
+          gA.sound.cursor.play();
+          gA.key.reset = false;
+          opts[k].reset(context, k);
+        }
+        if(opts[k].dec !== undefined && opts[k].y === this.curY && gA.key.left) {
+          gA.sound.cursor.play();
+          gA.key.left = false;
+          opts[k].dec(context, k);
+        }
+        if(opts[k].inc !== undefined && opts[k].y === this.curY && gA.key.right) {
+          gA.sound.cursor.play();
+          gA.key.right = false;
+          opts[k].inc(context, k);
+        }
       }
     };
     this.render = function() {
+      gA.ctx.g.font = ''+gA.cW/28+'px monospace';
       if(typeof(gA.ctx.g.fillStyle = opts[this.share.selected].color) === 'function')
         gA.ctx.g.fillStyle = opts[this.share.selected].color(context);
       else

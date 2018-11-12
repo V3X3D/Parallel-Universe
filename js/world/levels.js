@@ -1,21 +1,6 @@
 (function() {
   "use strict";
 
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
-  // [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0]
-
   var levelProto = {
     fgClr: function() {
       return {
@@ -280,7 +265,7 @@
       [0 ,1 ,6 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
       [0 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,4],
       [1 ,6 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,3 ,0 ,0 ,0 ,2],
-      [2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,3 ,4 ,1 ,1 ,0 ,0 ,0 ,2],
+      [2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,7 ,4 ,1 ,1 ,0 ,0 ,0 ,2],
       [5 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,2 ,2 ,1 ,2 ,2 ,2 ,0 ,2],
       [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,2 ,14,0 ,1 ,1 ,0 ,0 ,0 ,1],
       [4 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,1 ,0 ,0 ,6 ,1 ,0 ,0 ,0 ,1],
@@ -670,7 +655,7 @@
       [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,2 ,2 ,2 ,2 ,1 ,0 ,0 ,0 ,0 ,0],
       [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0]
     ],
-    bgClr: {R: 0, G: 0, B: 0},
+    invert: true,
     bloodClr: {R: 205},
     bloodShft: {min: 30, max: 120},
     background: function() {gA.load.push(new gA.bgSequence[2](3, 'T', 'R'), new gA.bgSequence[2](3, 'B', 'L'));},
@@ -722,7 +707,7 @@
       [0 ,0 ,0 ,0 ,2 ,1 ,2 ,2 ,1 ,1 ,1 ,2 ,7 ,0 ,0 ,8 ,4 ,1 ,0 ,2 ,2 ,1 ,2 ,0 ,0],
       [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,2 ,1 ,2 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0]
     ],
-    bgClr: {R: 0, G: 0, B: 0},
+    invert: true,
     bloodClr: {R: 205},
     bloodShft: {min: 30, max: 120},
     background: function() {gA.load.push(new gA.bgSequence[3](2, 'L', 'U', true), new gA.bgSequence[3](2, 'R', 'D', true));},
@@ -784,7 +769,7 @@
       [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,2 ,1 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0],
       [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0]
     ],
-    bgClr: {R: 0, G: 0, B: 0},
+    invert: true,
     bloodClr: {R: 205},
     bloodShft: {min: 30, max: 120},
     background: function() {gA.load.push(new gA.bgSequence[2](3, 'T', 'R'), new gA.bgSequence[2](3, 'B', 'L'));},
@@ -803,7 +788,7 @@
       [4 ,0 ,0 ,0 ,0 ,1 ,2 ,1 ,2 ,7 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,11,0 ,0 ,2 ,2 ,2 ,0 ,4 ,3 ,0 ,0 ,0 ,0 ,1 ,2],
       [1 ,11,0 ,1 ,1 ,0 ,0 ,0 ,0 ,2 ,0 ,7 ,0 ,0 ,0 ,0 ,1 ,0 ,11,0 ,0 ,10,1 ,2 ,0 ,6 ,2 ,0 ,0 ,0 ,0 ,6 ,2],
       [2 ,11,0 ,0 ,0 ,0 ,0 ,0 ,0 ,9 ,1 ,2 ,2 ,1 ,0 ,0 ,2 ,0 ,11,0 ,0 ,0 ,2 ,10,0 ,0 ,5 ,0 ,0 ,0 ,0 ,0 ,2],
-      [1 ,11,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,10,5 ,2 ,0 ,0 ,0 ,2 ,8 ,13,7 ,0 ,0 ,1 ,15,0 ,0 ,0 ,3 ,4 ,0 ,0 ,0 ,2],
+      [1 ,11,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,10,5 ,2 ,0 ,0 ,0 ,2 ,8 ,13,7 ,0 ,0 ,1 ,15,0 ,0 ,0 ,3 ,8 ,0 ,0 ,0 ,2],
       [1 ,11,0 ,0 ,0 ,0 ,7 ,0 ,0 ,0 ,0 ,0 ,6 ,0 ,0 ,4 ,2 ,1 ,1 ,2 ,0 ,0 ,2 ,8 ,0 ,0 ,0 ,5 ,1 ,0 ,0 ,0 ,1],
       [2 ,12,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,10,0 ,0 ,6 ,0 ,0 ,5 ,2 ,0 ,0 ,0 ,0 ,6 ,0 ,0 ,0 ,1],
       [0 ,2 ,4 ,0 ,0 ,0 ,0 ,0 ,0 ,11,0 ,0 ,3 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,2],
@@ -866,7 +851,16 @@ gA.lvl.text = (function() {
 
     this.render = function() {
       if(gA.key.down && gA.player.state.alive && gA.state.gameRunning && gA.player.state.focused) flip = true;
-      if(gA.lvl.num <= 4) {
+      if(!gA.player.state.alive && (gA.totalDeaths <= 1 || gA.lvl.num === 1)) {
+        gA.ctx.g.lineWidth = 3;
+        gA.ctx.g.lineJoin = 'circle';
+        gA.ctx.g.fillStyle = 'rgb('+gA.fgClr.R+','+gA.fgClr.G+','+gA.fgClr.B+')';
+        gA.ctx.g.strokeStyle = 'rgb('+gA.bgClr.R+','+gA.bgClr.G+','+gA.bgClr.B+')';
+        var string = 'Press \'s\' Or \'↓\' To Respawn.';
+        gA.ctx.g.font = ''+gA.cW/22+'px monospace';
+        gA.ctx.g.strokeText(string, gA.cW/2-gA.ctx.g.measureText(string).width/2, this.y);
+        gA.ctx.g.fillText(string, gA.cW/2-gA.ctx.g.measureText(string).width/2, this.y);
+      } else if(gA.lvl.num <= 4) {
         gA.ctx.g.font = ''+gA.cW/22+'px monospace';
         gA.ctx.g.fillStyle = 'rgb('+gA.fgClr.R+','+gA.fgClr.G+','+gA.fgClr.B+')';
 
@@ -879,12 +873,11 @@ gA.lvl.text = (function() {
         } else if(gA.lvl.num === 2) {
           gA.ctx.g.fillText('If Time Hits 0, You Die.', gA.cW/2-gA.ctx.g.measureText('If Time Hits 0, You Die.').width/2, this.y);
           gA.ctx.g.font = ''+gA.cW/30+'px monospace';
-          gA.ctx.g.fillText('Also, You Get Sent Back A Level.', gA.cW/2-gA.ctx.g.measureText('Also You Get Sent Back A Level.').width/2, this.y+gA.tS);
+          gA.ctx.g.fillText('Also, You Go Back A Level.', gA.cW/2-gA.ctx.g.measureText('Also You Go Back A Level.').width/2, this.y+gA.tS);
         }
 
         gA.ctx.g.fillStyle = 'rgb('+gA.bgClr.R+','+gA.bgClr.G+','+gA.bgClr.B+')';
         if(gA.lvl.num === 3) { gA.ctx.g.fillText('Good Luck.', gA.cW/2-gA.ctx.g.measureText('Good Luck.').width/2, this.y); }
-
       }
     };
   };

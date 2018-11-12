@@ -2,17 +2,18 @@ gA.heart = (function() {
   "use strict";
 
   var heartRate = 1;
-  var heartBeat = new Audio('sound/heartbeat.ogg');
+  var heartBeat = new Audio('sound/heartbeat.mp3');
   var beating = false;
 
   heartBeat.playbackRate = heartRate;
   heartBeat.loop = true;
-  heartBeat.volume = 0.8;
+  heartBeat.volume = gA.masterVolume;
 
   var heartPace = function(rate) {
     heartRate = rate;
     heartBeat.playbackRate = heartRate;
   };
+  var heartVolume = function() { heartBeat.volume = gA.masterVolume; };
   var heartStart = function() { heartBeat.play(); beating = true; };
   var heartPause = function() { heartBeat.pause(); beating = false; };
   var heartStop = function() { heartBeat.pause(); heartBeat.currentTime = 0; beating = false; };
@@ -22,6 +23,7 @@ gA.heart = (function() {
   };
 
   return {
+    vol: heartVolume,
     pace: heartPace,
     start: heartStart,
     pause: heartPause,

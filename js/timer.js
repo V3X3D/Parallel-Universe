@@ -9,11 +9,18 @@ gA.timer = {
     this.secs = this.newDate();
     this.started = true;
   },
-  reset: function() {
+  reset: function(lastLvl) {
     if(this.started) {
       this.secs = (this.newDate() - this.secs)/1000;
       this.secs = Math.abs(this.secs - this.pSecsTotal);
-      if(gA.lvl.num-1 > 0) {
+      if(lastLvl) {
+        gA.lvl.list[gA.lvl.num].totalTime += Math.round(this.secs*100)/100;
+        gA.lvl.list[gA.lvl.num].totalTime = Math.round(gA.lvl.list[gA.lvl.num].totalTime*100)/100;
+        if(this.secs < gA.lvl.list[gA.lvl.num].minTime || gA.lvl.list[gA.lvl.num].minTime === '?')
+          gA.lvl.list[gA.lvl.num].minTime = Math.round(this.secs*100)/100;
+        if(gA.lvl.list[gA.lvl.num].maxTime === '?' || this.secs > gA.lvl.list[gA.lvl.num].maxTime)
+          gA.lvl.list[gA.lvl.num].maxTime = Math.round(this.secs*100)/100;
+      } else if(gA.lvl.num-1 > 0) {
         gA.lvl.list[gA.lvl.num-1].totalTime += Math.round(this.secs*100)/100;
         gA.lvl.list[gA.lvl.num-1].totalTime = Math.round(gA.lvl.list[gA.lvl.num-1].totalTime*100)/100;
         if(this.secs < gA.lvl.list[gA.lvl.num-1].minTime || gA.lvl.list[gA.lvl.num-1].minTime === '?')
@@ -50,7 +57,6 @@ gA.hud = (function() {
   "use strict";
 
   var state = function() {
-    this.time = gA.lvl.list[gA.lvl.num].time;
     this.deaths;
     this.pace = 1000;
     this.wait = false;
@@ -115,7 +121,6 @@ gA.hud = (function() {
       gA.ctx.g.fillText('⌛ '+this.time, gap, gA.tS);
       gA.ctx.g.fillText('💀 '+this.deaths, textR, gA.tS);
       gA.ctx.g.fillText('L '+gA.lvl.num, gA.cW/2-gA.ctx.g.measureText('L '+gA.lvl.num).width/2, gA.tS);
-
     };
   };
 

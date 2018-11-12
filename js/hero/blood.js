@@ -16,7 +16,7 @@ gA.blood = (function() {
 
     this.invert = Math.random() < 0.5 ? -1 : 1;
 
-    if(!gA.lvl.cur.bloodClr) {
+    if(!gA.lvl.cur.bloodClr || gA.customClr) {
       this.RGBo = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = [gA.bgClr.R, gA.bgClr.G, gA.bgClr.B];
       this.RGB = gA.colorAjust(this.RGB, inc);
