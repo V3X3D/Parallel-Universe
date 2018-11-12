@@ -99,6 +99,9 @@ gA.viewCollide = (function() {
           var tX = (x * gA.tS) + (cTX-1)*gA.tS;
           var tY = (y * gA.tS) + (cTY-1)*gA.tS;
 
+          var xPos = obj.x+xDif;
+          var yPos = obj.y+yDif;
+
           /* Running two rectRect collision checks, this is because the x needs to vary
              this funciton is not being called with an xDif/yDif */
           if (rectRect(obj.x+1, obj.y, tX, tY, obj.w, obj.h, gA.tS, gA.tS)
@@ -177,7 +180,6 @@ gA.viewCollide = (function() {
               triangleLines.push(triLeft, triRight);
               playerLines.push(pLeft, pRight, pTop);
             }
-
 
           }
         }

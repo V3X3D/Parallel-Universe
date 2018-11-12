@@ -1,4 +1,18 @@
-Fixed spike collision it is now perfect
-Added half spikes
+Updates
+--------------
+Made level creation more flexable
+Added silly transition for chaning levels (need to make it better)
+Made blood perfect.
 
-Also just started working on wind, don't like how I'm doing so I'm gonna change it.
+
+Issues
+-------------
+Find way to make player bob on wind (like blood)
+Player is not locked in place during transition
+Wind should stop during transition
+
+
+
+Todo
+-----------
+clean up code (like for real this time)
