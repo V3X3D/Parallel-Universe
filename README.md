@@ -1,25 +1,15 @@
-Large parts to be added
------------------------------
-Canvas resizing
-+ Level Creation
-+ Stats overview -- main menu
-- Music/Sounds
+## Play Parallel Universe
 
-Small details to be added
------------------------------
-+ Screen shake on spike collision
-+ Death count variables
-+ Timer variables
-+ Stats overview -- pause menu
-+ Credits
+https://v3x3d.itch.io/parallel-universe  
+https://gamejolt.com/games/Parallel-Universe/376425
 
-Sounds Needed
-- slide in sounds for intro/pause
+## How to run
 
-TODO:
-  Maybe add flashing / easy way to see timer when it makes a sound
-  a few more sounds,
+Clone the repo  
+* git clone https://github.com/gitVEXED/Parallel-Universe
 
-  Remove extra dev code,
-  Clean up code
+Enter the folder  
+* cd Parallel-Universe
 
+Open the index file with a browser  
+* firefox index.html
